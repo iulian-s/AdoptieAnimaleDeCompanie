@@ -2,10 +2,12 @@ spring:
   application:
     name: adoptie
   datasource:
-    url: jdbc:postgresql://localhost:5432/adoptie
-#    change url to postgresql://postgres:5432/adoptie before dockerization
-    username: appuser
-    password: pass
+    url: jdbc:postgresql://localhost:${DB_PORT}/${DB_NAME}
+    #change localhost to ${DB_HOST} for docker
+    username: ${DB_USER}
+    password: ${DB_PASSWORD}
+  config:
+    import: "optional:dotenv:.env"
 
   jpa:
     hibernate:
