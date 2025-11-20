@@ -15,6 +15,9 @@ import org.hibernate.annotations.CreationTimestamp
 import org.hibernate.annotations.UpdateTimestamp
 import java.time.LocalDateTime
 
+/**
+ * Clasa anunt este reprezentarea obiectelor de tip anunt din baza de date, se folosesc @Table si @Entity pentru crearea automata a tabelelor si @Column pentru coloane
+ */
 @Table(name = "anunturi")
 @Entity
 data class Anunt(
@@ -22,46 +25,61 @@ data class Anunt(
     val id: Long = 0,
 
     @Column(name = "titlu")
-    val titlu: String = "",
+    var titlu: String = "",
 
     @Column(name = "descriere")
-    val descriere: String = "",
+    var descriere: String = "",
 
     @Column(name = "specie")
-    val specie: String = "",
+    var specie: String = "",
 
     @Column(name = "rasa")
-    val rasa: String = "",
+    var rasa: String = "",
 
     @Column(name = "gen")
     @Enumerated(EnumType.STRING)
-    val gen: Gen = Gen.MASCUL,
+    var gen: Gen = Gen.MASCUL,
 
     @Column(name = "varsta")
-    val varsta: Varsta = Varsta.NECUNOSCUT,
+    var varsta: Varsta = Varsta.NECUNOSCUT,
 
+    /**
+     * Redundant intrucat clasa enum Varsta contine aceste valori, dar este mai usor pentru query-uri in cazul filtrelor in functie de varsta
+     */
     @Column(name = "varsta_min")
-    val varstaMin: Int? = varsta.minLuni,
+    var varstaMin: Int? = varsta.minLuni,
 
+    /**
+     * Redundant intrucat clasa enum Varsta contine aceste valori, dar este mai usor pentru query-uri in cazul filtrelor in functie de varsta
+     */
     @Column(name = "varsta_max")
-    val varstaMax: Int? = varsta.maxLuni,
+    var varstaMax: Int? = varsta.maxLuni,
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "id_utilizator")
     val utilizator: Utilizator,
 
     @Column(name = "lista_imagini")
-    val listaImagini: MutableList<String> = mutableListOf(),
+    var listaImagini: MutableList<String> = mutableListOf(),
 
+    /**
+     * Starea anuntului, neverificat - anuntul va aparea intr-un tabel al adminului, daca continutul este ok, trece la activ, apoi userul poate dezactiva anuntul cand doreste
+     */
     @Column(name = "stare")
     @Enumerated(EnumType.STRING)
-    val stare: Stare = Stare.NEVERIFICAT,
+    var stare: Stare = Stare.NEVERIFICAT,
 
+    /**
+     * Data la care s-a creat anuntul
+     */
     @CreationTimestamp
     @Column(name = "created_at", updatable = false)
     val createdAt: LocalDateTime? = null,
 
+    /**
+     * Data la care s-a actualizat ultima data anuntul
+     */
     @UpdateTimestamp
     @Column(name = "updated_at")
-    val updatedAt: LocalDateTime? = null
+    var updatedAt: LocalDateTime? = null
 )

@@ -1,5 +1,6 @@
 package com.example.adoptie.controller
 
+import com.example.adoptie.dto.AnuntDTO
 import com.example.adoptie.model.Anunt
 import com.example.adoptie.service.AnunturiService
 import org.springframework.http.ResponseEntity
@@ -13,11 +14,11 @@ import org.springframework.web.bind.annotation.RestController
 class AnunturiController (
     val anunturiService: AnunturiService
 ){
-    @GetMapping("/raza") //trebuie modificat sa foloseasca dto, nu entitate
+    @GetMapping("/raza")
     fun getAnunturiInRaza(
         @RequestParam userId: Long,
         @RequestParam radiusKm: Double
-    ): ResponseEntity<List<Anunt>>{
+    ): ResponseEntity<List<AnuntDTO>>{
         return ResponseEntity.ok(anunturiService.getAnunturiInRaza(userId, radiusKm))
     }
 }

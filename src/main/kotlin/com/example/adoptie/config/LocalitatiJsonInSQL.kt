@@ -1,6 +1,6 @@
 package com.example.adoptie.config
 
-import com.example.adoptie.dto.LocalitateJson
+import com.example.adoptie.dto.LocalitateDTO
 import com.example.adoptie.model.Localitate
 import com.example.adoptie.repository.LocalitateRepository
 import com.fasterxml.jackson.databind.ObjectMapper
@@ -8,7 +8,10 @@ import jakarta.annotation.PostConstruct
 import org.springframework.core.io.ClassPathResource
 import org.springframework.stereotype.Component
 
-//O singura data, folosit ca sa incarce fisierul localitati.json in baza de date
+
+/**
+ * Clasa de tip @Component care verifica daca exista localitati in baza de date, iar daca nu, incarca fisierul localitati.json in baza de date
+ */
 @Component
 class LocalitatiJsonInSQL(
     private val localitateRepository: LocalitateRepository,
@@ -22,7 +25,7 @@ class LocalitatiJsonInSQL(
         val resource = ClassPathResource("localitati.json")
         val input = resource.inputStream
 
-        val lista = mapper.readValue(input, Array<LocalitateJson>::class.java).toList()
+        val lista = mapper.readValue(input, Array<LocalitateDTO>::class.java).toList()
 
         val entities = lista.map {
             Localitate(

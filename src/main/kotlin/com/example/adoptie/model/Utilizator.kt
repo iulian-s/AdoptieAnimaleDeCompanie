@@ -16,6 +16,10 @@ import jakarta.persistence.Table
 import org.hibernate.annotations.CreationTimestamp
 import java.time.LocalDateTime
 
+
+/**
+ * Clasa utilizator - folosita pentru autentificare/inregistrare si postat anunturi
+ */
 @Table(name = "utilizatori")
 @Entity
 data class Utilizator(
@@ -45,6 +49,9 @@ data class Utilizator(
     @Column(name = "telefon")
     var telefon: String = "",
 
+    /**
+     * Imaginea de profil a utilizatorului
+     */
     @Column(name = "avatar")
     var avatar: String = "",
 
@@ -52,6 +59,9 @@ data class Utilizator(
     @Column(name = "data_creare_utlizator", updatable = false)
     val dataCreare: LocalDateTime = LocalDateTime.now(),
 
+    /**
+     * Partea inversa a joinului, permite utilizatorului sa vada lista sa de anunturi
+     */
     @OneToMany(mappedBy = "utilizator", cascade = [CascadeType.ALL], orphanRemoval = true)
     var anunturi: MutableList<Anunt> = mutableListOf()
 
