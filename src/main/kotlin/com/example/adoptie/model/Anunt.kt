@@ -81,5 +81,10 @@ data class Anunt(
      */
     @UpdateTimestamp
     @Column(name = "updated_at")
-    var updatedAt: LocalDateTime? = null
+    var updatedAt: LocalDateTime? = null,
+
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "locatie")
+    var locatie: Localitate,
 )

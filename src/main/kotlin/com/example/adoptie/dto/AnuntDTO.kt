@@ -29,5 +29,6 @@ data class AnuntDTO(
     var stare: Stare = Stare.NEVERIFICAT,
     val createdAt: LocalDateTime? = null,
     var updatedAt: LocalDateTime? = null,
+    var locatieId: Long = 0
 
     )
