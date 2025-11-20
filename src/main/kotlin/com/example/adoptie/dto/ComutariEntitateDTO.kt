@@ -70,10 +70,11 @@ fun Anunt.toDTO(): AnuntDTO = AnuntDTO(
     listaImagini = this.listaImagini,
     stare = this.stare,
     createdAt = this.createdAt,
-    updatedAt = this.updatedAt
+    updatedAt = this.updatedAt,
+    locatieId = this.locatie.id,
 )
 
-fun AnuntDTO.toEntity(utilizator: Utilizator): Anunt = Anunt(
+fun AnuntDTO.toEntity(utilizator: Utilizator, locatie: Localitate): Anunt = Anunt(
     id = this.id,
     titlu = this.titlu,
     descriere = this.descriere,
@@ -87,5 +88,6 @@ fun AnuntDTO.toEntity(utilizator: Utilizator): Anunt = Anunt(
     listaImagini = this.listaImagini,
     stare = this.stare,
     createdAt = this.createdAt,
-    updatedAt = this.updatedAt
+    updatedAt = this.updatedAt,
+    locatie = locatie
 )

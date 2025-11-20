@@ -15,5 +15,5 @@ interface AnunturiRepository: JpaRepository<Anunt, Long> {
     /**
      * Returneaza o lista cu anunturile utilizatorului dupa id-ul acestuia
      */
-    fun findByUtilizator_Id(id: Long): List<Anunt>
+    fun findByUtilizator_Id(id: Long?): List<Anunt>
 }

@@ -1,7 +1,7 @@
 package com.example.adoptie.controller
 
 import com.example.adoptie.dto.AnuntDTO
-import com.example.adoptie.model.Anunt
+import com.example.adoptie.dto.toDTO
 import com.example.adoptie.service.AnunturiService
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.GetMapping
@@ -14,11 +14,18 @@ import org.springframework.web.bind.annotation.RestController
 class AnunturiController (
     val anunturiService: AnunturiService
 ){
-    @GetMapping("/raza")
+    //@PreAuthorize("hasRole('USER')")
+    @GetMapping("/razaUser")
+    fun getAnunturiInRaza(@RequestParam razaKm: Double): ResponseEntity<List<AnuntDTO>>
+    = ResponseEntity.ok(anunturiService.getAnunturiInRazaFataDeLocatiaUserului(razaKm).map{it.toDTO()})
+
+    //@PreAuthorize("hasRole('USER')")
+    @GetMapping("/razaLocalitate")
     fun getAnunturiInRaza(
-        @RequestParam userId: Long,
-        @RequestParam radiusKm: Double
-    ): ResponseEntity<List<AnuntDTO>>{
-        return ResponseEntity.ok(anunturiService.getAnunturiInRaza(userId, radiusKm))
-    }
+        @RequestParam localitateId: Long,
+        @RequestParam razaKm: Double
+    ): ResponseEntity<List<AnuntDTO>> = ResponseEntity.ok(
+        anunturiService.getAnunturiInRazaFataDeLocatiaSelectata(localitateId, razaKm).map { it.toDTO() }
+    )
+
 }

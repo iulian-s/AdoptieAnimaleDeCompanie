@@ -1,14 +1,98 @@
 package com.example.adoptie.service
 
+import com.example.adoptie.dto.UtilizatorDTO
+import com.example.adoptie.dto.toEntity
+import com.example.adoptie.model.Utilizator
+import com.example.adoptie.repository.AnunturiRepository
+import com.example.adoptie.repository.LocalitateRepository
 import com.example.adoptie.repository.UtilizatorRepository
+import org.springframework.security.core.context.SecurityContextHolder
 import org.springframework.stereotype.Service
+import org.springframework.security.crypto.password.PasswordEncoder
 
 /**
  * Service pentru logica din spatele API-urilor specifice entitatii Utilizator
  */
 @Service
 class UtilizatorService(
-    private val utilizatorRepository: UtilizatorRepository
+    private val utilizatorRepository: UtilizatorRepository,
+    private val passwordEncoder: PasswordEncoder,
+    private val localitateRepository: LocalitateRepository,
+    private val anunturiRepository: AnunturiRepository
 ) {
+    /**
+     * Metoda de inregistrare a utilizatorului - creare cont
+     */
+    fun inregistrare(dto: UtilizatorDTO): Utilizator {
+        if(utilizatorRepository.findByUsername(dto.username) != null) throw IllegalArgumentException("Username luat")
+        val parolaEncodata = passwordEncoder.encode(dto.parola)
+        val user = dto.toEntity(localitateRepository.findById(dto.localitateId).orElse(null)).apply {
+            this.parola = parolaEncodata
+            this.nume = dto.username
+            this.avatar = "/imagini/avatar.png"
+        }
+        return(utilizatorRepository.save(user))
+    }
 
+    /**
+     * Metoda de listare a tuturor utilizatorilor
+     */
+    fun listareUtilizatori(): List<Utilizator> = utilizatorRepository.findAll()
+
+
+    /**
+     * Metoda de intoarcere a informatiilor utilizatorului autentificat
+     */
+    fun infoUtilizator(): Utilizator{
+        val auth = SecurityContextHolder.getContext().authentication
+        val user = utilizatorRepository.findByUsername(auth.name)?: throw IllegalArgumentException("Nu am gasit informatii pentru utilizatorul ${auth.name}")
+        val anunturi = anunturiRepository.findByUtilizator_Id(user.id).toMutableList()
+        user.anunturi = anunturi
+        return user
+    }
+    /**
+     * Metoda de editare a informatiilor utilizatorului autentificat
+     */
+    fun editInfoUtilizator(dto: UtilizatorDTO):Utilizator{
+        val auth = SecurityContextHolder.getContext().authentication
+        val user = utilizatorRepository.findByUsername(auth.name)?: throw IllegalArgumentException("Nu am gasit informatii pentru utilizatorul ${auth.name}")
+        return actualizareUtilizator(user.id, dto)
+    }
+
+    /**
+     * Metoda de stergere a contului utilizatorului autentificat
+     */
+    fun stergeContUtilizator(){
+        val auth = SecurityContextHolder.getContext().authentication
+        val user = utilizatorRepository.findByUsername(auth.name)?: throw IllegalArgumentException("Nu am gasit informatii pentru utilizatorul ${auth.name}")
+        utilizatorRepository.delete(user)
+    }
+
+    /**
+     * Metoda de actualizare a informatiilor unui utilizator
+     */
+    fun actualizareUtilizator(id: Long, dto: UtilizatorDTO): Utilizator {
+        val utilizator = utilizatorRepository.findById(id).orElseThrow { IllegalArgumentException("Utilizatorul cu id $id nu s-a gasit.") }
+        utilizator.apply {
+            this.username = dto.username
+            this.parola = dto.parola
+            this.email = dto.email
+            this.parola = dto.parola
+            this.rol = dto.rol
+            this.nume = dto.nume
+            this.localitate = localitateRepository.findById(dto.localitateId).orElse(null)
+            this.telefon = dto.telefon
+            this.avatar = dto.avatar
+            this.anunturi = this.anunturi
+        }
+        return utilizatorRepository.save(utilizator)
+    }
+
+    /**
+     * Metoda de stergere a utilizatorului
+     */
+    fun stergereUtilizator(id: Long){
+        val user = utilizatorRepository.findById(id).orElseThrow { IllegalArgumentException("Utilizatorul cu id $id nu s-a gasit.") }
+        utilizatorRepository.delete(user)
+    }
 }

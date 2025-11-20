@@ -1,12 +1,13 @@
 package com.example.adoptie.service
 
-import com.example.adoptie.dto.AnuntDTO
 import com.example.adoptie.dto.UtilizatorDTO
 import com.example.adoptie.dto.toDTO
+import com.example.adoptie.model.Anunt
 import com.example.adoptie.model.Stare
 import com.example.adoptie.repository.AnunturiRepository
 import com.example.adoptie.repository.LocalitateRepository
 import com.example.adoptie.repository.UtilizatorRepository
+import org.springframework.security.core.context.SecurityContextHolder
 import org.springframework.stereotype.Service
 import kotlin.math.pow
 
@@ -37,26 +38,43 @@ class AnunturiService(
     /**
      * Extragerea coordonatelor din dto de tip utilizator
      */
-    fun getCoordinates(dto: UtilizatorDTO): Pair<Double, Double>? {
+    fun getCoordonate(dto: UtilizatorDTO): Pair<Double, Double>? {
         val loc = localitateRepository.findById(dto.localitateId).orElseThrow{IllegalArgumentException("Localitatea cu id ${dto.localitateId} nu exista!") }
         return loc.latitudine to loc.longitudine
     }
 
     /**
-     * Return lista de anunturi active din zona selectata + raza
+     * Return lista de anunturi active la locatia utilizatorului + raza
      */
-    fun getAnunturiInRaza(userId: Long, radiusKm: Double): List<AnuntDTO> {
-        val user = utilizatorRepository.findById(userId).orElseThrow().toDTO()
-        val coords = getCoordinates(user) ?: return emptyList()
-        val(centerLat, centerLon) = coords
-        val anunturiActive = anunturiRepository.findByStare(Stare.ACTIV).map{it.toDTO()}
+    fun getAnunturiInRazaFataDeLocatiaUserului(razaKm: Double): List<Anunt> {
+        val auth = SecurityContextHolder.getContext().authentication
+        val user = utilizatorRepository.findByUsername(auth.name)?.toDTO()?: throw IllegalArgumentException("Nu am gasit informatii despre locatia utilizatorului ${auth.name}")
+        val userCoords = getCoordonate(user) ?: return emptyList()
+        val(centerLat, centerLon) = userCoords
+        val anunturiActive = anunturiRepository.findByStare(Stare.ACTIV)
 
         return anunturiActive.filter{ anunt ->
-            val anuntUserDTO = utilizatorRepository.findById(anunt.utilizatorId).orElse(null)?.toDTO() ?: return@filter false
+            val(lat, lon) = anunt.locatie.let{it.latitudine to it.longitudine }
 
-            val anuntCoords = getCoordinates(anuntUserDTO)
-            anuntCoords != null &&
-                    distanceKm(centerLat, centerLon, anuntCoords.first, anuntCoords.second) <= radiusKm
+            distanceKm(centerLat, centerLon, lat, lon) <= razaKm
+        }
+    }
+
+    /**
+     * Return lista de anunturi active pentru localitatea selectata + raza
+     */
+    fun getAnunturiInRazaFataDeLocatiaSelectata(localitateId: Long, razaKm: Double): List<Anunt> {
+        val localitate = localitateRepository.findById(localitateId)
+            .orElseThrow { IllegalArgumentException("Localitate invalida") }
+
+        val centerLat = localitate.latitudine
+        val centerLon = localitate.longitudine
+
+        val anunturiActive = anunturiRepository.findByStare(Stare.ACTIV)
+
+        return anunturiActive.filter { anunt ->
+            val (lat, lon) = anunt.locatie.let { it.latitudine to it.longitudine }
+            distanceKm(centerLat, centerLon, lat, lon) <= razaKm
         }
     }
 
