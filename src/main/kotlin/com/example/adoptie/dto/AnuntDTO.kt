@@ -9,16 +9,16 @@ import java.time.LocalDateTime
 data class AnuntDTO(
     val id: Long = 0,
 
-    @field:NotBlank("Campul trebuie completat!")
+    @field:NotBlank(message = "Campul trebuie completat!")
     var titlu: String = "",
 
-    @field:NotBlank("Campul trebuie completat!")
+    @field:NotBlank(message = "Campul trebuie completat!")
     var descriere: String = "",
 
-    @field:NotBlank("Campul trebuie completat!")
+    @field:NotBlank(message = "Campul trebuie completat!")
     var specie: String = "",
 
-    @field:NotBlank("Campul trebuie completat!")
+    @field:NotBlank(message = "Campul trebuie completat!")
     var rasa: String = "",
     var gen: Gen = Gen.MASCUL,
     var varsta: Varsta = Varsta.NECUNOSCUT,

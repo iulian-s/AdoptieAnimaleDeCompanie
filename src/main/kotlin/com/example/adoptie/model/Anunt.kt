@@ -85,6 +85,6 @@ data class Anunt(
 
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "locatie")
+    @JoinColumn(name = "id_locatie")
     var locatie: Localitate,
 )
