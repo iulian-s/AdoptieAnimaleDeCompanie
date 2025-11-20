@@ -7,5 +7,13 @@ import org.springframework.stereotype.Repository
 
 @Repository
 interface AnunturiRepository: JpaRepository<Anunt, Long> {
-    fun findAllByStare(stare: Stare): List<Anunt>
+    /**
+     * Returneaza o lista cu anunturi in functie de criteriu, activ, inactiv, neverificat
+     */
+    fun findByStare(stare: Stare): List<Anunt>
+
+    /**
+     * Returneaza o lista cu anunturile utilizatorului dupa id-ul acestuia
+     */
+    fun findByUtilizator_Id(id: Long): List<Anunt>
 }
