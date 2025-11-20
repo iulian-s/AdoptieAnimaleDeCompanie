@@ -8,13 +8,13 @@ import java.time.LocalDateTime
 data class UtilizatorDTO(
     val id: Long = 0,
 
-    @field:NotBlank("Campul trebuie completat!")
+    @field:NotBlank(message = "Campul trebuie completat!")
     val username: String = "",
 
-    @field:NotBlank("Campul trebuie completat!")
+    @field:NotBlank(message = "Campul trebuie completat!")
     var parola: String = "",
 
-    @field:Email("Email invalid!")
+    @field:Email(message = "Email invalid!")
     val email: String = "",
 
     val rol: Rol,
