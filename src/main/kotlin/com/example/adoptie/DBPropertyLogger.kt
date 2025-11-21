@@ -13,7 +13,8 @@ class DbPropertyLogger(
     @Value("\${DB_PORT}") private val port: String,
     @Value("\${DB_NAME}") private val name: String,
     @Value("\${DB_USER}") private val user: String,
-    @Value("\${DB_PASSWORD}") private val password: String
+    @Value("\${DB_PASSWORD}") private val password: String,
+    @Value("\${JWT_SECRET}") private val jwtSecret: String
 ) {
 
     private val log = LoggerFactory.getLogger(DbPropertyLogger::class.java)
@@ -25,5 +26,6 @@ class DbPropertyLogger(
         log.info("SPRING DB_NAME = {}", name)
         log.info("SPRING DB_USER = {}", user)
         log.info("SPRING DB_PASSWORD = {}", password)
+        log.info("JWT SECRET = {}", jwtSecret)
     }
 }

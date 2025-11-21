@@ -43,7 +43,7 @@ data class Utilizator(
     var nume: String = "",
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "localitate_id")
+    @JoinColumn(name = "localitate_id", nullable = true)
     var localitate: Localitate? = null,
 
     @Column(name = "telefon")

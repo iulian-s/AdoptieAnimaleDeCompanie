@@ -20,11 +20,11 @@ data class UtilizatorDTO(
     @field:Email(message = "Email invalid!")
     val email: String = "",
 
-    val rol: Rol,
-    var nume: String,
+    val rol: Rol = Rol.USER,
+    var nume: String = "",
     var localitateId: Long = 0,
     var telefon: String = "",
     var avatar: String ="",
-    val dataCreare: LocalDateTime,
+    val dataCreare: LocalDateTime = LocalDateTime.now(),
     var anunturi: MutableList<Anunt> = mutableListOf()
 )
