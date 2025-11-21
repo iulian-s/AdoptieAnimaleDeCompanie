@@ -19,17 +19,21 @@ class UtilizatorService(
     private val utilizatorRepository: UtilizatorRepository,
     private val passwordEncoder: PasswordEncoder,
     private val localitateRepository: LocalitateRepository,
-    private val anunturiRepository: AnunturiRepository
+    private val anunturiRepository: AnunturiRepository,
+    private val localitateService: LocalitateService,
 ) {
     /**
      * Metoda de inregistrare a utilizatorului - creare cont
      */
     fun inregistrare(dto: CreareUtilizatorDTO): Utilizator {
         if(utilizatorRepository.findByUsername(dto.username) != null) throw IllegalArgumentException("Username luat")
+
         val parolaEncodata = passwordEncoder.encode(dto.parola)
-        val user = dto.toEntity(localitateRepository.findById(dto.localitateId).orElse(null)).apply {
+
+        val localitate = localitateService.getLocalitateByJudetAndNume(dto.judet, dto.localitate)
+        val user = dto.toEntity(localitate).apply {
             this.parola = parolaEncodata
-            this.nume = dto.username
+            this.nume = dto.nume.ifBlank { dto.username }
             this.avatar = "/imagini/avatar.png"
         }
         return(utilizatorRepository.save(user))

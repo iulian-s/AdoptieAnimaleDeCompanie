@@ -60,7 +60,7 @@ fun UtilizatorDTO.toEntity(localitate: Localitate): Utilizator = Utilizator(
 /**
  * Creare dto, include parola
  */
-fun CreareUtilizatorDTO.toEntity(localitate: Localitate): Utilizator = Utilizator(
+fun CreareUtilizatorDTO.toEntity(localitate: Localitate?): Utilizator = Utilizator(
     username = this.username,
     parola = this.parola,
     email = this.email,

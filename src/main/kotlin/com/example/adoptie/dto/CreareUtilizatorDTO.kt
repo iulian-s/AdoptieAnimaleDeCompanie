@@ -19,11 +19,13 @@ data class CreareUtilizatorDTO(
     @field:Email(message = "Email invalid!")
     val email: String = "",
 
-    val rol: Rol,
-    var nume: String,
-    var localitateId: Long = 0,
+    val rol: Rol = Rol.USER,
+    var nume: String = "",
+    var localitateId: Long? = null,
     var telefon: String = "",
     var avatar: String ="",
-    val dataCreare: LocalDateTime,
-    var anunturi: MutableList<Anunt> = mutableListOf()
+    val dataCreare: LocalDateTime = LocalDateTime.now(),
+    var anunturi: MutableList<Anunt> = mutableListOf(),
+    var judet: String? = null,
+    var localitate: String? = null,
 )
