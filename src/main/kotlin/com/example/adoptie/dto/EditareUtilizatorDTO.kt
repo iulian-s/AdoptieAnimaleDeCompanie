@@ -2,20 +2,20 @@ package com.example.adoptie.dto
 
 import com.example.adoptie.model.Anunt
 import com.example.adoptie.model.Rol
-import jakarta.validation.constraints.*
+import jakarta.validation.constraints.Email
+import jakarta.validation.constraints.NotBlank
 import java.time.LocalDateTime
 
 /**
- * Nu contine parola, se foloseste la citire
+ * contine si id si parola pentru editare
  */
-data class UtilizatorDTO(
+data class EditareUtilizatorDTO(
     val id: Long = 0,
-
     @field:NotBlank(message = "Campul trebuie completat!")
     val username: String = "",
 
-//    @field:NotBlank(message = "Campul trebuie completat!")
-//    var parola: String = "",
+    @field:NotBlank(message = "Campul trebuie completat!")
+    var parola: String = "",
 
     @field:Email(message = "Email invalid!")
     val email: String = "",

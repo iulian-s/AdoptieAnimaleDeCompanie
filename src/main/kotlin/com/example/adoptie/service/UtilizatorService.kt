@@ -1,6 +1,7 @@
 package com.example.adoptie.service
 
-import com.example.adoptie.dto.UtilizatorDTO
+import com.example.adoptie.dto.CreareUtilizatorDTO
+import com.example.adoptie.dto.EditareUtilizatorDTO
 import com.example.adoptie.dto.toEntity
 import com.example.adoptie.model.Utilizator
 import com.example.adoptie.repository.AnunturiRepository
@@ -23,7 +24,7 @@ class UtilizatorService(
     /**
      * Metoda de inregistrare a utilizatorului - creare cont
      */
-    fun inregistrare(dto: UtilizatorDTO): Utilizator {
+    fun inregistrare(dto: CreareUtilizatorDTO): Utilizator {
         if(utilizatorRepository.findByUsername(dto.username) != null) throw IllegalArgumentException("Username luat")
         val parolaEncodata = passwordEncoder.encode(dto.parola)
         val user = dto.toEntity(localitateRepository.findById(dto.localitateId).orElse(null)).apply {
@@ -39,6 +40,9 @@ class UtilizatorService(
      */
     fun listareUtilizatori(): List<Utilizator> = utilizatorRepository.findAll()
 
+    fun citireUtilizatorById(id: Long): Utilizator =
+        utilizatorRepository.findById(id).orElseThrow { IllegalArgumentException("Utilizatorul cu id $id nu exista!") }
+
 
     /**
      * Metoda de intoarcere a informatiilor utilizatorului autentificat
@@ -53,7 +57,7 @@ class UtilizatorService(
     /**
      * Metoda de editare a informatiilor utilizatorului autentificat
      */
-    fun editInfoUtilizator(dto: UtilizatorDTO):Utilizator{
+    fun editInfoUtilizator(dto: EditareUtilizatorDTO):Utilizator{
         val auth = SecurityContextHolder.getContext().authentication
         val user = utilizatorRepository.findByUsername(auth.name)?: throw IllegalArgumentException("Nu am gasit informatii pentru utilizatorul ${auth.name}")
         return actualizareUtilizator(user.id, dto)
@@ -71,7 +75,7 @@ class UtilizatorService(
     /**
      * Metoda de actualizare a informatiilor unui utilizator
      */
-    fun actualizareUtilizator(id: Long, dto: UtilizatorDTO): Utilizator {
+    fun actualizareUtilizator(id: Long, dto: EditareUtilizatorDTO): Utilizator {
         val utilizator = utilizatorRepository.findById(id).orElseThrow { IllegalArgumentException("Utilizatorul cu id $id nu s-a gasit.") }
         utilizator.apply {
             this.username = dto.username
