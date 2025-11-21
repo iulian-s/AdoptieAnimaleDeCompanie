@@ -4,14 +4,8 @@ import com.example.adoptie.model.Gen
 import com.example.adoptie.model.Stare
 import com.example.adoptie.model.Varsta
 import jakarta.validation.constraints.NotBlank
-import java.time.LocalDateTime
 
-/**
- *
- */
-data class AnuntDTO(
-    val id: Long = 0,
-
+data class CreareAnuntDTO(
     @field:NotBlank(message = "Campul trebuie completat!")
     var titlu: String = "",
 
@@ -30,8 +24,5 @@ data class AnuntDTO(
     val utilizatorId: Long = 0,
     var listaImagini: MutableList<String> = mutableListOf(),
     var stare: Stare = Stare.NEVERIFICAT,
-    val createdAt: LocalDateTime? = null,
-    var updatedAt: LocalDateTime? = null,
     var locatieId: Long = 0
-
-    )
+)

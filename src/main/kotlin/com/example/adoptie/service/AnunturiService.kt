@@ -1,7 +1,10 @@
 package com.example.adoptie.service
 
+import com.example.adoptie.dto.AnuntDTO
+import com.example.adoptie.dto.CreareAnuntDTO
 import com.example.adoptie.dto.UtilizatorDTO
 import com.example.adoptie.dto.toDTO
+import com.example.adoptie.dto.toEntity
 import com.example.adoptie.model.Anunt
 import com.example.adoptie.model.Stare
 import com.example.adoptie.repository.AnunturiRepository
@@ -51,7 +54,7 @@ class AnunturiService(
         val user = utilizatorRepository.findByUsername(auth.name)?.toDTO()?: throw IllegalArgumentException("Nu am gasit informatii despre locatia utilizatorului ${auth.name}")
         val userCoords = getCoordonate(user) ?: return emptyList()
         val(centerLat, centerLon) = userCoords
-        val anunturiActive = anunturiRepository.findByStare(Stare.ACTIV)
+        val anunturiActive = vizualizareAnunturiActive()
 
         return anunturiActive.filter{ anunt ->
             val(lat, lon) = anunt.locatie.let{it.latitudine to it.longitudine }
@@ -77,5 +80,84 @@ class AnunturiService(
             distanceKm(centerLat, centerLon, lat, lon) <= razaKm
         }
     }
+
+    /**
+     * Metoda de creare a unui anunt
+     */
+    fun creareAnunt(dto: CreareAnuntDTO): Anunt{
+        val auth = SecurityContextHolder.getContext().authentication
+        val user = utilizatorRepository.findByUsername(auth.name) ?: throw IllegalArgumentException("Nu am gasit informatii despre utilizatorul ${auth.name}")
+        return anunturiRepository.save(dto.toEntity(user, localitateRepository.findById(dto.locatieId).orElseThrow{IllegalArgumentException("Localitatea cu id ${dto.locatieId} nu exista!")}))
+    }
+
+    /**
+     * Metoda de listare a tuturor anunturilor active
+     */
+    fun vizualizareAnunturiActive(): List<Anunt> = anunturiRepository.findByStare(Stare.ACTIV)
+
+    /**
+     * Metoda de listare a tuturor anunturilor
+     */
+    fun vizualizareAnunturi(): List<Anunt> = anunturiRepository.findAll()
+
+    /**
+     * Metoda de listare a tuturor anunturilor neverificate
+     */
+    fun vizualizareAnunturiNeverificate(): List<Anunt> = anunturiRepository.findByStare(Stare.NEVERIFICAT)
+
+    /**
+     * Metoda de editare anunt
+     */
+    fun editareAnunt(id: Long, dto: AnuntDTO): Anunt{
+        val anunt = anunturiRepository.findById(id).orElseThrow { IllegalArgumentException("Anuntul cu id $id nu exista!") }
+        editareCampuriAnunt(anunt, dto)
+        return anunturiRepository.save(anunt)
+    }
+
+    fun editareCampuriAnunt(anunt: Anunt, dto: AnuntDTO): Anunt = anunt.apply {
+        this.titlu = dto.titlu
+        this.descriere = dto.descriere
+        this.specie = dto.specie
+        this.rasa = dto.rasa
+        this.gen = dto.gen
+        this.varsta = dto.varsta
+        this.listaImagini = dto.listaImagini
+        this.stare = dto.stare
+        this.locatie = localitateRepository.findById(dto.locatieId).orElseThrow{IllegalArgumentException("Localitate invalida") }
+    }
+
+
+
+    /**
+     *Metoda prin care utilizatorul isi modifica propriile anunturi
+     */
+    fun editareAnuntPropriu(id: Long, dto: AnuntDTO): Anunt{
+        val auth = SecurityContextHolder.getContext().authentication
+        val user = utilizatorRepository.findByUsername(auth.name) ?: throw IllegalArgumentException("Nu am gasit utilizatorul ${auth.name}")
+        val anunt = anunturiRepository.findById(id).orElseThrow { IllegalArgumentException("Anuntul cu id $id nu exista!") }
+        if(anunt.utilizator.id != user.id) throw IllegalAccessException("Anuntul ales nu apartine utilizatorului logat!")
+        anunt.apply{
+            titlu = dto.titlu
+            descriere = dto.descriere
+            specie = dto.specie
+            rasa = dto.rasa
+            gen = dto.gen
+            varsta = dto.varsta
+            listaImagini = dto.listaImagini
+            locatie = localitateRepository.findById(dto.locatieId)
+                .orElseThrow { IllegalArgumentException("Localitate invalida") }
+
+            // permit doar schimbarea intre ACTIV si INACTIV
+            if (dto.stare == Stare.ACTIV || dto.stare == Stare.INACTIV) {
+                stare = dto.stare
+            }
+        }
+        return anunturiRepository.save(anunt)
+    }
+
+    /**
+     * Metoda de stergere anunt
+     */
+    fun stergereAnunt(id:Long) = anunturiRepository.delete(anunturiRepository.findById(id).orElseThrow { IllegalArgumentException("Anuntul cu id $id nu exista!") })
 
 }

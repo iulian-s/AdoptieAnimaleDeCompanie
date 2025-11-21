@@ -28,11 +28,11 @@ fun LocalitateDTO.toEntity(): Localitate = Localitate(
     longitudine = lng
 )
 
+
 fun Utilizator.toDTO(): UtilizatorDTO = UtilizatorDTO(
     id = this.id,
     username = this.username,
     email = this.email,
-    parola = this.parola,
     nume = this.nume,
     rol = this.rol,
     localitateId = this.localitate?.id ?: 0,
@@ -41,12 +41,46 @@ fun Utilizator.toDTO(): UtilizatorDTO = UtilizatorDTO(
     dataCreare = this.dataCreare,
     anunturi = this.anunturi
 )
-
+/**
+ * Citire informatii, parola este exclusa
+ */
 fun UtilizatorDTO.toEntity(localitate: Localitate): Utilizator = Utilizator(
     id = this.id,
     username = this.username,
     email = this.email,
+    nume = this.nume,
+    rol = this.rol,
+    localitate = localitate,
+    telefon = this.telefon,
+    avatar = this.avatar,
+    dataCreare = this.dataCreare,
+    anunturi = this.anunturi
+)
+
+/**
+ * Creare dto, include parola
+ */
+fun CreareUtilizatorDTO.toEntity(localitate: Localitate): Utilizator = Utilizator(
+    username = this.username,
     parola = this.parola,
+    email = this.email,
+    nume = this.nume,
+    rol = this.rol,
+    localitate = localitate,
+    telefon = this.telefon,
+    avatar = this.avatar,
+    dataCreare = this.dataCreare,
+    anunturi = this.anunturi
+)
+
+/**
+ * Editare dto, include si id si parola
+ */
+fun EditareUtilizatorDTO.toEntity(localitate: Localitate): Utilizator = Utilizator(
+    id = this.id,
+    username = this.username,
+    parola = this.parola,
+    email = this.email,
     nume = this.nume,
     rol = this.rol,
     localitate = localitate,
@@ -74,6 +108,9 @@ fun Anunt.toDTO(): AnuntDTO = AnuntDTO(
     locatieId = this.locatie.id,
 )
 
+/**
+ * Citire si editare anunt
+ */
 fun AnuntDTO.toEntity(utilizator: Utilizator, locatie: Localitate): Anunt = Anunt(
     id = this.id,
     titlu = this.titlu,
@@ -89,5 +126,23 @@ fun AnuntDTO.toEntity(utilizator: Utilizator, locatie: Localitate): Anunt = Anun
     stare = this.stare,
     createdAt = this.createdAt,
     updatedAt = this.updatedAt,
+    locatie = locatie
+)
+
+/**
+ * Creare anunt
+ */
+fun CreareAnuntDTO.toEntity(utilizator: Utilizator, locatie: Localitate): Anunt = Anunt(
+    titlu = this.titlu,
+    descriere = this.descriere,
+    specie = this.specie,
+    rasa = this.rasa,
+    gen = this.gen,
+    varsta = this.varsta,
+    varstaMin = this.varstaMin,
+    varstaMax = this.varstaMax,
+    utilizator = utilizator,
+    listaImagini = this.listaImagini,
+    stare = this.stare,
     locatie = locatie
 )
