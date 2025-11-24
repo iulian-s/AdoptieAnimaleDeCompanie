@@ -1,0 +1,32 @@
+###delete user
+#DELETE http://localhost:8080/api/utilizator/4
+
+###edit user
+PUT http://localhost:8080/api/utilizator/edit
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJyb2xlIjoiUk9MRV9VU0VSIiwic3ViIjoidXNlciIsImlhdCI6MTc2Mzk5MzAzMywiZXhwIjoxNzY0MDc5NDMzfQ.ooaoXWpsNQPI-91aelo3BHzQGyKbEuRtcDp5Ac_zRM4
+
+{
+  "telefon": "0700000000",
+  "parola": "1234",
+  "id": "2",
+  "username": "user",
+  "email": "testuser@example.com",
+  "rol": "USER",
+  "nume": "user",
+  "localitateId": "3",
+  "avatar": "/imagini/avatar.png",
+  "dataCreare": "2025-11-21T18:36:12.543465"
+}
+
+###info user
+GET http://localhost:8080/api/utilizator/eu
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJyb2xlIjoiUk9MRV9VU0VSIiwic3ViIjoidXNlciIsImlhdCI6MTc2Mzk5MzAzMywiZXhwIjoxNzY0MDc5NDMzfQ.ooaoXWpsNQPI-91aelo3BHzQGyKbEuRtcDp5Ac_zRM4
+
+###stergere cont user
+#DELETE http://localhost:8080/api/utilizator
+#Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJyb2xlIjoiUk9MRV9VU0VSIiwic3ViIjoiaXVsaWFuNTAwNCIsImlhdCI6MTc2Mzk5MzU0NCwiZXhwIjoxNzY0MDc5OTQ0fQ.pe_NXeeKh6YAEkIJj9aIEhtI4uBzSTEZ8ULkVR_LEsQ
+
+###
+GET http://localhost:8080/api/utilizator

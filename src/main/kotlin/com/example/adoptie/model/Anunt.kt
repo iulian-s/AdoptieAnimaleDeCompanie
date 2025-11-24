@@ -1,5 +1,6 @@
 package com.example.adoptie.model
 
+import com.fasterxml.jackson.annotation.JsonBackReference
 import jakarta.persistence.Column
 import jakarta.persistence.Entity
 import jakarta.persistence.EnumType
@@ -57,6 +58,7 @@ data class Anunt(
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "id_utilizator")
+    @JsonBackReference
     val utilizator: Utilizator,
 
     @Column(name = "lista_imagini")

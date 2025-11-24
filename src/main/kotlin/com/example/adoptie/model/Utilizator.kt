@@ -1,5 +1,6 @@
 package com.example.adoptie.model
 
+import com.fasterxml.jackson.annotation.JsonManagedReference
 import jakarta.persistence.CascadeType
 import jakarta.persistence.Column
 import jakarta.persistence.Entity
@@ -63,6 +64,7 @@ data class Utilizator(
      * Partea inversa a joinului, permite utilizatorului sa vada lista sa de anunturi
      */
     @OneToMany(mappedBy = "utilizator", cascade = [CascadeType.ALL], orphanRemoval = true)
-    var anunturi: MutableList<Anunt> = mutableListOf()
+    @JsonManagedReference
+    var anunturi: MutableList<Anunt>? = mutableListOf()
 
 )

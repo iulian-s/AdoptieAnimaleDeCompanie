@@ -3,7 +3,6 @@ package com.example.adoptie.config
 import com.example.adoptie.service.DetaliiUtilizatorService
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
-import org.springframework.http.HttpMethod
 import org.springframework.security.authentication.AuthenticationManager
 import org.springframework.security.authentication.AuthenticationProvider
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider
@@ -35,6 +34,9 @@ class ConfigSpringSecurity(private val jwtAuthFilter: JwtAuthFilter, private val
             .csrf{it.disable()}
             .authorizeHttpRequests {
                 it.requestMatchers("/api/auth/**").permitAll() // deschide endpointuri pt logare si inregistrare
+                it.requestMatchers("/api/animalute/**").permitAll()
+                it.requestMatchers("/api/**").permitAll() //TREBUIE STEARSA NEAPARAT DUPA TESTARE
+                it.requestMatchers("/imagini/**").permitAll()
             }
             .sessionManagement {
                 it.sessionCreationPolicy(SessionCreationPolicy.STATELESS)

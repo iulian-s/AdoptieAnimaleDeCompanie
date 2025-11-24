@@ -160,4 +160,12 @@ class AnunturiService(
      */
     fun stergereAnunt(id:Long) = anunturiRepository.delete(anunturiRepository.findById(id).orElseThrow { IllegalArgumentException("Anuntul cu id $id nu exista!") })
 
+    /**
+     * Metoda de intoarcere a anunturilor utilizatorului logat
+     */
+    fun anunturiUtilizator(): List<Anunt> {
+        val auth = SecurityContextHolder.getContext().authentication
+        val user = utilizatorRepository.findByUsername(auth.name) ?: throw IllegalArgumentException("Nu am gasit utilizatorul ${auth.name}")
+        return (anunturiRepository.findByUtilizator_Id(user.id))
+    }
 }

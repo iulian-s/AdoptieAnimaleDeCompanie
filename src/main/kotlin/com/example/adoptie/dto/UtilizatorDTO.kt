@@ -1,6 +1,5 @@
 package com.example.adoptie.dto
 
-import com.example.adoptie.model.Anunt
 import com.example.adoptie.model.Rol
 import jakarta.validation.constraints.*
 import java.time.LocalDateTime
@@ -26,5 +25,6 @@ data class UtilizatorDTO(
     var telefon: String = "",
     var avatar: String ="",
     val dataCreare: LocalDateTime = LocalDateTime.now(),
-    var anunturi: MutableList<Anunt> = mutableListOf()
+
+    var anuntIds: MutableList<Long> = mutableListOf()
 )

@@ -10,6 +10,7 @@ import com.example.adoptie.repository.UtilizatorRepository
 import org.springframework.security.core.context.SecurityContextHolder
 import org.springframework.stereotype.Service
 import org.springframework.security.crypto.password.PasswordEncoder
+import java.util.Locale.getDefault
 
 /**
  * Service pentru logica din spatele API-urilor specifice entitatii Utilizator
@@ -33,7 +34,7 @@ class UtilizatorService(
         val localitate = localitateService.getLocalitateByJudetAndNume(dto.judet, dto.localitate)
         val user = dto.toEntity(localitate).apply {
             this.parola = parolaEncodata
-            this.nume = dto.nume.ifBlank { dto.username }
+            this.nume = dto.nume.ifBlank { dto.username.replaceFirstChar { if (it.isLowerCase()) it.titlecase(getDefault()) else it.toString() }.replace("[^A-Za-z]".toRegex(), "")  }
             this.avatar = "/imagini/avatar.png"
         }
         return(utilizatorRepository.save(user))
@@ -58,6 +59,7 @@ class UtilizatorService(
         user.anunturi = anunturi
         return user
     }
+
     /**
      * Metoda de editare a informatiilor utilizatorului autentificat
      */
