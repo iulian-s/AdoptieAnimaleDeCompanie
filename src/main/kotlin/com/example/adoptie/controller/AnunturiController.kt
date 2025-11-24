@@ -29,7 +29,7 @@ class AnunturiController (
      */
     //@PreAuthorize("hasRole('USER')")
     @GetMapping("/razaUser")
-    fun getAnunturiInRaza(@RequestParam razaKm: Double): ResponseEntity<List<AnuntDTO>>
+    fun getAnunturiInRaza(@RequestParam(required = false) razaKm: Double = 5.0): ResponseEntity<List<AnuntDTO>>
     = ResponseEntity.ok(anunturiService.getAnunturiInRazaFataDeLocatiaUserului(razaKm).map{it.toDTO()})
 
     /**

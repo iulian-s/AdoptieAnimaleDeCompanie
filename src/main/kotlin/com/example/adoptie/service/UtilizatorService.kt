@@ -83,11 +83,12 @@ class UtilizatorService(
      */
     fun actualizareUtilizator(id: Long, dto: EditareUtilizatorDTO): Utilizator {
         val utilizator = utilizatorRepository.findById(id).orElseThrow { IllegalArgumentException("Utilizatorul cu id $id nu s-a gasit.") }
+        val parolaEncodata = passwordEncoder.encode(dto.parola)
         utilizator.apply {
             this.username = dto.username
             this.parola = dto.parola
             this.email = dto.email
-            this.parola = dto.parola
+            this.parola = parolaEncodata
             this.rol = dto.rol
             this.nume = dto.nume
             this.localitate = localitateRepository.findById(dto.localitateId).orElse(null)

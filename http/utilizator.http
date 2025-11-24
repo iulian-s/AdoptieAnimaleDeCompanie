@@ -11,7 +11,7 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJyb2xlIjoiUk9MRV9VU0VSIiwic3ViIjoid
   "parola": "1234",
   "id": "2",
   "username": "user",
-  "email": "testuser@example.com",
+  "email": "testuser@example.ro",
   "rol": "USER",
   "nume": "user",
   "localitateId": "3",
