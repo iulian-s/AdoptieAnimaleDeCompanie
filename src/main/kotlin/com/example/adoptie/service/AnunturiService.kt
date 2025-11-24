@@ -7,7 +7,6 @@ import com.example.adoptie.dto.toDTO
 import com.example.adoptie.dto.toEntity
 import com.example.adoptie.model.Anunt
 import com.example.adoptie.model.Stare
-import com.example.adoptie.model.Utilizator
 import com.example.adoptie.repository.AnunturiRepository
 import com.example.adoptie.repository.LocalitateRepository
 import com.example.adoptie.repository.UtilizatorRepository

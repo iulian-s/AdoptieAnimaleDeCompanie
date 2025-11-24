@@ -1,6 +1,5 @@
 package com.example.adoptie.dto
 
-import com.example.adoptie.model.Anunt
 import com.example.adoptie.model.Rol
 import jakarta.validation.constraints.Email
 import jakarta.validation.constraints.NotBlank
