@@ -35,6 +35,9 @@ class ConfigSpringSecurity(private val jwtAuthFilter: JwtAuthFilter, private val
             .csrf{it.disable()}
             .authorizeHttpRequests {
                 it.requestMatchers("/api/auth/**").permitAll() // deschide endpointuri pt logare si inregistrare
+                it.requestMatchers("/api/animalute/**").permitAll()
+                it.requestMatchers("/api/**").permitAll() //TREBUIE STEARSA NEAPARAT DUPA TESTARE
+                it.requestMatchers("/imagini/**").permitAll()
             }
             .sessionManagement {
                 it.sessionCreationPolicy(SessionCreationPolicy.STATELESS)

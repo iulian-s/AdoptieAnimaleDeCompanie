@@ -26,5 +26,5 @@ data class EditareUtilizatorDTO(
     var telefon: String = "",
     var avatar: String ="",
     val dataCreare: LocalDateTime = LocalDateTime.now(),
-    var anunturi: MutableList<Anunt> = mutableListOf()
+    var anuntIds: MutableList<Long> = mutableListOf()
 )

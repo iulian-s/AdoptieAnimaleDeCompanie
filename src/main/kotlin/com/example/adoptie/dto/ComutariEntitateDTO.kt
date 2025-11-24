@@ -3,7 +3,6 @@ package com.example.adoptie.dto
 import com.example.adoptie.model.Anunt
 import com.example.adoptie.model.Localitate
 import com.example.adoptie.model.Utilizator
-import com.example.adoptie.repository.UtilizatorRepository
 
 /**
  * Functii de comutare intre entitate si DTO
@@ -39,12 +38,12 @@ fun Utilizator.toDTO(): UtilizatorDTO = UtilizatorDTO(
     telefon = this.telefon,
     avatar = this.avatar,
     dataCreare = this.dataCreare,
-    anunturi = this.anunturi
+    anuntIds = this.anunturi?.map{it.id} as MutableList<Long>
 )
 /**
  * Citire informatii, parola este exclusa
  */
-fun UtilizatorDTO.toEntity(localitate: Localitate): Utilizator = Utilizator(
+fun UtilizatorDTO.toEntity(localitate: Localitate, anunturi: List<Anunt>): Utilizator = Utilizator(
     id = this.id,
     username = this.username,
     email = this.email,
@@ -54,7 +53,7 @@ fun UtilizatorDTO.toEntity(localitate: Localitate): Utilizator = Utilizator(
     telefon = this.telefon,
     avatar = this.avatar,
     dataCreare = this.dataCreare,
-    anunturi = this.anunturi
+    anunturi = anunturi.toMutableList(),
 )
 
 /**
@@ -70,13 +69,13 @@ fun CreareUtilizatorDTO.toEntity(localitate: Localitate?): Utilizator = Utilizat
     telefon = this.telefon,
     avatar = this.avatar,
     dataCreare = this.dataCreare,
-    anunturi = this.anunturi
+    anunturi = null
 )
 
 /**
  * Editare dto, include si id si parola
  */
-fun EditareUtilizatorDTO.toEntity(localitate: Localitate): Utilizator = Utilizator(
+fun EditareUtilizatorDTO.toEntity(localitate: Localitate, anunturi: List<Anunt>?): Utilizator = Utilizator(
     id = this.id,
     username = this.username,
     parola = this.parola,
@@ -87,7 +86,7 @@ fun EditareUtilizatorDTO.toEntity(localitate: Localitate): Utilizator = Utilizat
     telefon = this.telefon,
     avatar = this.avatar,
     dataCreare = this.dataCreare,
-    anunturi = this.anunturi
+    anunturi = anunturi as MutableList<Anunt>?
 )
 
 fun Anunt.toDTO(): AnuntDTO = AnuntDTO(
