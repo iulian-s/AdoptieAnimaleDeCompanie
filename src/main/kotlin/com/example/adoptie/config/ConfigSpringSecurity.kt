@@ -23,7 +23,11 @@ import org.springframework.web.cors.UrlBasedCorsConfigurationSource
  */
 @EnableWebSecurity
 @Configuration
-class ConfigSpringSecurity(private val jwtAuthFilter: JwtAuthFilter, private val userDetailsService: DetaliiUtilizatorService) {
+class ConfigSpringSecurity(
+    private val jwtAuthFilter: JwtAuthFilter,
+    private val userDetailsService: DetaliiUtilizatorService,
+
+) {
     @Bean
     fun passwordEncoder(): PasswordEncoder = BCryptPasswordEncoder()
 
@@ -32,6 +36,7 @@ class ConfigSpringSecurity(private val jwtAuthFilter: JwtAuthFilter, private val
         http
             .cors{}
             .csrf{it.disable()}
+
             .authorizeHttpRequests {
                 it.requestMatchers("/api/auth/**").permitAll() // deschide endpointuri pt logare si inregistrare
                 it.requestMatchers("/api/animalute/**").permitAll()
@@ -43,6 +48,7 @@ class ConfigSpringSecurity(private val jwtAuthFilter: JwtAuthFilter, private val
             }
             .authenticationProvider(authenticationProvider())
             .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter::class.java)
+
         return http.build()
     }
 

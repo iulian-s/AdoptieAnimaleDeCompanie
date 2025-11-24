@@ -61,3 +61,10 @@ GET http://localhost:8080/api/anunturi/active
 ###anunturi neverificate
 GET http://localhost:8080/api/anunturi/neverificate
 
+###anunturi in raza de x km fata de locatia utilizatorului
+GET http://localhost:8080/api/anunturi/razaUser
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJyb2xlIjoiUk9MRV9VU0VSIiwic3ViIjoidXNlciIsImlhdCI6MTc2Mzk5NDAwMSwiZXhwIjoxNzY0MDgwNDAxfQ.gsj-Zag_OmjcS8133AvQ2DRR64kaFaQ00l3awa96TLs
+
+###anunturi in raza de x km fata de locatia aleasa
+GET http://localhost:8080/api/anunturi/razaLocalitate?localitateId=13&razaKm=30
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJyb2xlIjoiUk9MRV9VU0VSIiwic3ViIjoidXNlciIsImlhdCI6MTc2Mzk5NDAwMSwiZXhwIjoxNzY0MDgwNDAxfQ.gsj-Zag_OmjcS8133AvQ2DRR64kaFaQ00l3awa96TLs
