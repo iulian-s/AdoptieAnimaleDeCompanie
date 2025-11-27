@@ -42,6 +42,7 @@ class ConfigSpringSecurity(
                 it.requestMatchers("/api/animalute/**").permitAll()
                 it.requestMatchers("/api/**").permitAll() //TREBUIE STEARSA NEAPARAT DUPA TESTARE
                 it.requestMatchers("/imagini/**").permitAll()
+                it.requestMatchers("/localitati/**").permitAll()
             }
             .sessionManagement {
                 it.sessionCreationPolicy(SessionCreationPolicy.STATELESS)

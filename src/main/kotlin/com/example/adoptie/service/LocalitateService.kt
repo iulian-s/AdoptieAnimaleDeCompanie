@@ -14,4 +14,9 @@ class LocalitateService(private val localitateRepository: LocalitateRepository) 
         if (judet.isNullOrBlank() || nume.isNullOrBlank()) return null
         return localitateRepository.findByJudetAndNume(judet, nume)
     }
+
+    /**
+     * returneaza locatia pe baza id ului
+     */
+    fun getLocalitateById(id: Long): Localitate? = localitateRepository.findById(id).orElseThrow{IllegalArgumentException("Localitate $id not found")}
 }
