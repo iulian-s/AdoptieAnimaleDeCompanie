@@ -23,7 +23,8 @@ class LogActiuneInterceptor(private val logRepo: LogActiuneRepository): HandlerI
         val auth = SecurityContextHolder.getContext().authentication
         val user = auth.name ?: "Anonim"
 
-        if (!request.requestURI.contains("/api/auth/login")) {
+        if (!request.requestURI.contains("/api/auth/login") &&
+                (request.method == "POST" || request.method == "PUT" || request.method == "DELETE")) {
             logRepo.save(
                 LogActiune(
                     username = user,

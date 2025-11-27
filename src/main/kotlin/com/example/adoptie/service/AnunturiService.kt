@@ -106,6 +106,11 @@ class AnunturiService(
     fun vizualizareAnunturiNeverificate(): List<Anunt> = anunturiRepository.findByStare(Stare.NEVERIFICAT)
 
     /**
+     * Metoda de intoarcere a unui anunt
+     */
+    fun vizualizareAnuntById(id: Long): Anunt = anunturiRepository.findById(id).orElseThrow { IllegalArgumentException("Anuntul cu id $id nu exista!") }
+
+    /**
      * Metoda de editare anunt
      */
     fun editareAnunt(id: Long, dto: AnuntDTO): Anunt{

@@ -6,6 +6,7 @@ import com.example.adoptie.dto.toDTO
 import com.example.adoptie.service.AnunturiService
 import jakarta.validation.Valid
 import org.springframework.http.ResponseEntity
+import org.springframework.security.access.prepost.PreAuthorize
 import org.springframework.web.bind.annotation.DeleteMapping
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.PathVariable
@@ -122,5 +123,15 @@ class AnunturiController (
     fun vizualizareAnunturiProprii(): ResponseEntity<List<AnuntDTO>>{
         val anunturi = anunturiService.anunturiUtilizator()
         return ResponseEntity.ok(anunturi.map { it.toDTO() })
+    }
+
+    /**
+     * Metoda pentru returnare date dintr-un anunt selectat
+     */
+    //@PreAuthorize("hasRole('USER') or hasRole('ADMIN')")
+    @GetMapping("/{id}")
+    fun vizualizareAnuntById(@PathVariable id: Long): ResponseEntity<AnuntDTO>{
+        val anunt = anunturiService.vizualizareAnuntById(id)
+        return ResponseEntity.ok(anunt.toDTO())
     }
 }
