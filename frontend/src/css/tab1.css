@@ -29,7 +29,6 @@ tbody tr:last-child td {
     border-bottom: none;
 }
 
-/* Optional responsive */
 @media (max-width: 600px) {
     th, td {
         padding: 8px 12px;

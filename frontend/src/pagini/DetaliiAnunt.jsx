@@ -95,7 +95,20 @@ export default function DetaliiAnunt() {
                 Varsta: {anunt.varsta}
             </p>
             <p style={{ lineHeight: "1.6", fontSize: "16px", color: "#333", textAlign: "justify" }}>
-                ID-ul utilizatorului care a postat: {anunt.utilizatorId}, cu username: {username}
+                ID-ul utilizatorului care a postat:
+                <span
+                    key={id}
+                    onClick={() => window.open(`http://localhost:3000/utilizator/${anunt.utilizatorId}`, "_blank")}
+                    style={{
+                        color: "#007bff",
+                        cursor: "pointer",
+                        textDecoration: "underline",
+                        fontWeight: "bold"
+                    }}
+                >
+                    {anunt.utilizatorId}
+                </span>
+
             </p>
             <p style={{ lineHeight: "1.6", fontSize: "16px", color: "#333", textAlign: "justify" }}>
                 Creat la data: {anunt.createdAt}
