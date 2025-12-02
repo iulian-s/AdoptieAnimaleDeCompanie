@@ -1,9 +1,9 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import api from "../api";
 import "../css/dashboard.css";
-import { jwtDecode } from "jwt-decode";
 import Anunturi from "././Anunturi.jsx"
+import Utilizatori from "./Utilizatori.jsx";
+import Loguri from "./Loguri.jsx";
 
 export default function Dashboard() {
     const [activeTab, setActiveTab] = useState("tab1");
@@ -14,9 +14,9 @@ export default function Dashboard() {
             case "tab1":
                 return <Anunturi />;
             case "tab2":
-                return <div>Continutul tabului 2</div>;
+                return <Utilizatori />;
             case "tab3":
-                return <div>Continutul tabului 3</div>;
+                return <Loguri />;
             default:
                 return null;
         }
@@ -50,13 +50,13 @@ export default function Dashboard() {
                         onClick={() => setActiveTab("tab2")}
                         className={`tab-button ${activeTab === "tab2" ? "active" : ""}`}
                     >
-                        Tab 2
+                        Utilizatori
                     </button>
                     <button
                         onClick={() => setActiveTab("tab3")}
                         className={`tab-button ${activeTab === "tab3" ? "active" : ""}`}
                     >
-                        Tab 3
+                        Loguri
                     </button>
                 </div>
 

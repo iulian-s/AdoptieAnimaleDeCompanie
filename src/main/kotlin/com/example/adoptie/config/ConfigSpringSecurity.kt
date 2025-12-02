@@ -43,6 +43,7 @@ class ConfigSpringSecurity(
                 it.requestMatchers("/api/**").permitAll() //TREBUIE STEARSA NEAPARAT DUPA TESTARE
                 it.requestMatchers("/imagini/**").permitAll()
                 it.requestMatchers("/localitati/**").permitAll()
+                it.requestMatchers("/logs").permitAll()
             }
             .sessionManagement {
                 it.sessionCreationPolicy(SessionCreationPolicy.STATELESS)
