@@ -15,7 +15,9 @@ import org.springframework.web.bind.annotation.PutMapping
 import org.springframework.web.bind.annotation.RequestBody
 import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RequestParam
+import org.springframework.web.bind.annotation.RequestPart
 import org.springframework.web.bind.annotation.RestController
+import org.springframework.web.multipart.MultipartFile
 
 /**
  * Controller ce expune endpoint-uri pentru gestiunea actiunilor asupra entitatii Anunt
@@ -49,9 +51,13 @@ class AnunturiController (
      * Metoda pentru crearea unui anunt
      */
     //@PreAuthorize("hasRole('USER')")
-    @PostMapping
-    fun creareAnunt(@RequestBody @Valid dto: CreareAnuntDTO): ResponseEntity<AnuntDTO>{
-        val anunt = anunturiService.creareAnunt(dto)
+    @PostMapping(consumes = ["multipart/form-data"])
+    fun creareAnunt(
+        @RequestPart("anunt") @Valid dto: CreareAnuntDTO,
+        @RequestPart("imagini") imagini: List<MultipartFile>
+
+    ): ResponseEntity<AnuntDTO>{
+        val anunt = anunturiService.creareAnunt(dto, imagini)
         return ResponseEntity.ok(anunt.toDTO())
     }
 

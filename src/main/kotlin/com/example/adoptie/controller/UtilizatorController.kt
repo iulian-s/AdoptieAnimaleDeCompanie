@@ -14,7 +14,9 @@ import org.springframework.web.bind.annotation.PathVariable
 import org.springframework.web.bind.annotation.PutMapping
 import org.springframework.web.bind.annotation.RequestBody
 import org.springframework.web.bind.annotation.RequestMapping
+import org.springframework.web.bind.annotation.RequestPart
 import org.springframework.web.bind.annotation.RestController
+import org.springframework.web.multipart.MultipartFile
 
 
 @RestController
@@ -62,9 +64,9 @@ class UtilizatorController(private val utilizatorService: UtilizatorService) {
      * API dedicat utilizatorului pentru a edita informatiile personale
      */
     //@PreAuthorize("hasRole('USER')")
-    @PutMapping("/edit")
-    fun editareInfoUtilizator(@RequestBody @Valid dto: EditareUtilizatorDTO): ResponseEntity<UtilizatorDTO>{
-        val user = utilizatorService.editInfoUtilizator(dto)
+    @PutMapping("/edit", consumes = ["multipart/form-data"])
+    fun editareInfoUtilizator(@RequestPart("dto") @Valid dto: EditareUtilizatorDTO, @RequestPart("avatar") avatar: MultipartFile ): ResponseEntity<UtilizatorDTO>{
+        val user = utilizatorService.editInfoUtilizator(dto, avatar)
         return ResponseEntity.ok(user.toDTO())
     }
     /**
