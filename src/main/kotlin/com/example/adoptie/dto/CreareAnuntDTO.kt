@@ -22,7 +22,7 @@ data class CreareAnuntDTO(
     var varstaMin: Int? = varsta.minLuni,
     var varstaMax: Int? = varsta.maxLuni,
     val utilizatorId: Long = 0,
-    var listaImagini: MutableList<String> = mutableListOf(),
+    //var listaImagini: MutableList<String> = mutableListOf(),
     var stare: Stare = Stare.NEVERIFICAT,
     var locatieId: Long = 0
 )

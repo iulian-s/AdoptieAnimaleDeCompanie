@@ -7,9 +7,13 @@ import com.example.adoptie.model.Utilizator
 import com.example.adoptie.repository.AnunturiRepository
 import com.example.adoptie.repository.LocalitateRepository
 import com.example.adoptie.repository.UtilizatorRepository
+import org.springframework.beans.factory.annotation.Value
 import org.springframework.security.core.context.SecurityContextHolder
 import org.springframework.stereotype.Service
 import org.springframework.security.crypto.password.PasswordEncoder
+import org.springframework.web.multipart.MultipartFile
+import java.nio.file.Files
+import java.nio.file.Paths
 import java.util.Locale.getDefault
 
 /**
@@ -63,10 +67,26 @@ class UtilizatorService(
     /**
      * Metoda de editare a informatiilor utilizatorului autentificat
      */
-    fun editInfoUtilizator(dto: EditareUtilizatorDTO):Utilizator{
+    fun editInfoUtilizator(dto: EditareUtilizatorDTO, avatar: MultipartFile):Utilizator{
         val auth = SecurityContextHolder.getContext().authentication
         val user = utilizatorRepository.findByUsername(auth.name)?: throw IllegalArgumentException("Nu am gasit informatii pentru utilizatorul ${auth.name}")
+        dto.avatar = saveImage(avatar)
         return actualizareUtilizator(user.id, dto)
+    }
+
+    @Value("\${app.upload.dir}")
+    lateinit var uploadDir: String
+
+    fun saveImage(file: MultipartFile): String {
+        val dir = Paths.get(uploadDir)
+        Files.createDirectories(dir)
+
+        val filename = "${System.currentTimeMillis()}_${file.originalFilename}"
+        val target = dir.resolve(filename)
+
+        Files.write(target, file.bytes)
+
+        return "/imagini/$filename"
     }
 
     /**

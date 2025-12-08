@@ -10,8 +10,13 @@ import com.example.adoptie.model.Stare
 import com.example.adoptie.repository.AnunturiRepository
 import com.example.adoptie.repository.LocalitateRepository
 import com.example.adoptie.repository.UtilizatorRepository
+import org.springframework.beans.factory.annotation.Value
 import org.springframework.security.core.context.SecurityContextHolder
 import org.springframework.stereotype.Service
+import org.springframework.web.multipart.MultipartFile
+import java.io.File
+import java.nio.file.Files
+import java.nio.file.Paths
 import kotlin.math.pow
 
 /**
@@ -84,11 +89,33 @@ class AnunturiService(
     /**
      * Metoda de creare a unui anunt
      */
-    fun creareAnunt(dto: CreareAnuntDTO): Anunt{
+    fun creareAnunt(dto: CreareAnuntDTO, imagini: List<MultipartFile>): Anunt{
         val auth = SecurityContextHolder.getContext().authentication
         val user = utilizatorRepository.findByUsername(auth.name) ?: throw IllegalArgumentException("Nu am gasit informatii despre utilizatorul ${auth.name}")
-        return anunturiRepository.save(dto.toEntity(user, localitateRepository.findById(dto.locatieId).orElseThrow{IllegalArgumentException("Localitatea cu id ${dto.locatieId} nu exista!")}))
+
+        val imagePaths = saveImages(imagini) //returneaza lista de string
+        val anunt = dto.toEntity(user, localitateRepository.findById(dto.locatieId).orElseThrow{IllegalArgumentException("Localitatea cu id ${dto.locatieId} nu exista!")})
+        anunt.listaImagini = imagePaths.toMutableList()
+        return anunturiRepository.save(anunt)
     }
+
+
+    @Value("\${app.upload.dir}")
+    lateinit var uploadDir: String
+
+    fun saveImage(file: MultipartFile): String {
+        val dir = Paths.get(uploadDir)
+        Files.createDirectories(dir)
+
+        val filename = "${System.currentTimeMillis()}_${file.originalFilename}"
+        val target = dir.resolve(filename)
+
+        Files.write(target, file.bytes)
+
+        return "/imagini/$filename"
+    }
+
+    fun saveImages(files: List<MultipartFile>): List<String> = files.map { saveImage(it) }
 
     /**
      * Metoda de listare a tuturor anunturilor active

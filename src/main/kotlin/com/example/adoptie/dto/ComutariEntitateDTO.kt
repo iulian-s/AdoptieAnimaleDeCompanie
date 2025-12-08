@@ -141,7 +141,6 @@ fun CreareAnuntDTO.toEntity(utilizator: Utilizator, locatie: Localitate): Anunt 
     varstaMin = this.varstaMin,
     varstaMax = this.varstaMax,
     utilizator = utilizator,
-    listaImagini = this.listaImagini,
     stare = this.stare,
     locatie = locatie
 )
