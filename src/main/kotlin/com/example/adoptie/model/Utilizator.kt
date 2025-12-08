@@ -54,7 +54,7 @@ data class Utilizator(
      * Imaginea de profil a utilizatorului
      */
     @Column(name = "avatar")
-    var avatar: String = "",
+    var avatar: String? = "",
 
     @CreationTimestamp
     @Column(name = "data_creare_utlizator", updatable = false)

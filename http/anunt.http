@@ -1,6 +1,6 @@
 POST http://localhost:8080/api/anunturi
 Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJyb2xlIjoiUk9MRV9VU0VSIiwic3ViIjoidXNlciIsImlhdCI6MTc2Mzk5NDAwMSwiZXhwIjoxNzY0MDgwNDAxfQ.gsj-Zag_OmjcS8133AvQ2DRR64kaFaQ00l3awa96TLs
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJyb2xlIjoiUk9MRV9VU0VSIiwic3ViIjoidXNlciIsImlhdCI6MTc2NTIwNTQ4MiwiZXhwIjoxNzY1MjkxODgyfQ.TfD-adyeIDO0MBs4q2Upu0VIhjxxhi6_u6luRUhnpFY
 
 {
   "titlu": "Dau spre adoptie dragon cu barba",
@@ -40,7 +40,7 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJyb2xlIjoiUk9MRV9VU0VSIiwic3ViIjoid
 ###update anunt de catre admin
 PUT http://localhost:8080/api/anunturi/1
 Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJyb2xlIjoiUk9MRV9VU0VSIiwic3ViIjoidXNlciIsImlhdCI6MTc2Mzk5NDAwMSwiZXhwIjoxNzY0MDgwNDAxfQ.gsj-Zag_OmjcS8133AvQ2DRR64kaFaQ00l3awa96TLs
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJyb2xlIjoiUk9MRV9VU0VSIiwic3ViIjoidXNlciIsImlhdCI6MTc2NTIwNTQ4MiwiZXhwIjoxNzY1MjkxODgyfQ.TfD-adyeIDO0MBs4q2Upu0VIhjxxhi6_u6luRUhnpFY
 
 {
   "titlu": "Pisicuta mica si dragalasa",
@@ -50,7 +50,6 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJyb2xlIjoiUk9MRV9VU0VSIiwic3ViIjoid
   "gen": "FEMELA",
   "varsta": "TREI_SASE_LUNI",
   "utilizatorId": 2,
-  "listaImagini": ["/imagini/cat1.jpg", "/imagini/cat2.jpg", "/imagini/cat3.jpg"],
   "stare": "ACTIV",
   "locatieId": 3
 }
