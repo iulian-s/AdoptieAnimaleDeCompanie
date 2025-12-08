@@ -67,11 +67,27 @@ class UtilizatorService(
     /**
      * Metoda de editare a informatiilor utilizatorului autentificat
      */
-    fun editInfoUtilizator(dto: EditareUtilizatorDTO, avatar: MultipartFile):Utilizator{
+    fun editInfoUtilizator(dto: EditareUtilizatorDTO, avatar: MultipartFile?):Utilizator{
         val auth = SecurityContextHolder.getContext().authentication
         val user = utilizatorRepository.findByUsername(auth.name)?: throw IllegalArgumentException("Nu am gasit informatii pentru utilizatorul ${auth.name}")
-        dto.avatar = saveImage(avatar)
-        return actualizareUtilizator(user.id, dto)
+//        val localitate = localitateRepository.findById(dto.localitateId).orElseThrow{IllegalArgumentException("Localitatea cu id ${dto.localitateId} nu exista!")}
+//        val anunturi = anunturiRepository.findByUtilizator_Id(user.id).toMutableList()
+//        val utilizator = dto.toEntity(localitate, anunturi)
+//        val oldAvatar = user.avatar
+//
+        val parolaEncodata = passwordEncoder.encode(dto.parola)
+        user.apply {
+            this.email = dto.email
+            this.parola = parolaEncodata
+            this.nume = dto.nume
+            this.localitate = localitateRepository.findById(dto.localitateId).orElse(null)
+            this.telefon = dto.telefon
+            if (avatar != null) {
+                this.avatar = saveImage(avatar)
+            }
+        }
+        return utilizatorRepository.save(user)
+
     }
 
     @Value("\${app.upload.dir}")
@@ -98,26 +114,6 @@ class UtilizatorService(
         utilizatorRepository.delete(user)
     }
 
-    /**
-     * Metoda de actualizare a informatiilor unui utilizator
-     */
-    fun actualizareUtilizator(id: Long, dto: EditareUtilizatorDTO): Utilizator {
-        val utilizator = utilizatorRepository.findById(id).orElseThrow { IllegalArgumentException("Utilizatorul cu id $id nu s-a gasit.") }
-        val parolaEncodata = passwordEncoder.encode(dto.parola)
-        utilizator.apply {
-            this.username = dto.username
-            this.parola = dto.parola
-            this.email = dto.email
-            this.parola = parolaEncodata
-            this.rol = dto.rol
-            this.nume = dto.nume
-            this.localitate = localitateRepository.findById(dto.localitateId).orElse(null)
-            this.telefon = dto.telefon
-            this.avatar = dto.avatar
-            this.anunturi = this.anunturi
-        }
-        return utilizatorRepository.save(utilizator)
-    }
 
     /**
      * Metoda de stergere a utilizatorului

@@ -3,20 +3,20 @@
 
 ###edit user
 PUT http://localhost:8080/api/utilizator/edit
-Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJyb2xlIjoiUk9MRV9VU0VSIiwic3ViIjoidXNlciIsImlhdCI6MTc2Mzk5MzAzMywiZXhwIjoxNzY0MDc5NDMzfQ.ooaoXWpsNQPI-91aelo3BHzQGyKbEuRtcDp5Ac_zRM4
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJyb2xlIjoiUk9MRV9VU0VSIiwic3ViIjoidXNlciIsImlhdCI6MTc2NTIwNTQ4MiwiZXhwIjoxNzY1MjkxODgyfQ.TfD-adyeIDO0MBs4q2Upu0VIhjxxhi6_u6luRUhnpFY
 
-{
-  "telefon": "0700000000",
+Content-Type: multipart/form-data
+
+# JSON part
+dto: {
+  "telefon": "0700000069",
   "parola": "1234",
-  "id": "2",
+  "id": 2,
   "username": "user",
   "email": "testuser@example.ro",
   "rol": "USER",
   "nume": "user",
-  "localitateId": "3",
-  "avatar": "/imagini/avatar.png",
-  "dataCreare": "2025-11-21T18:36:12.543465"
+  "localitateId": 3
 }
 
 ###info user

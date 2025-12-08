@@ -23,7 +23,7 @@ data class UtilizatorDTO(
     var nume: String = "",
     var localitateId: Long = 0,
     var telefon: String = "",
-    var avatar: String ="",
+    var avatar: String? = null,
     val dataCreare: LocalDateTime = LocalDateTime.now(),
 
     var anuntIds: MutableList<Long> = mutableListOf()

@@ -65,7 +65,7 @@ class UtilizatorController(private val utilizatorService: UtilizatorService) {
      */
     //@PreAuthorize("hasRole('USER')")
     @PutMapping("/edit", consumes = ["multipart/form-data"])
-    fun editareInfoUtilizator(@RequestPart("dto") @Valid dto: EditareUtilizatorDTO, @RequestPart("avatar") avatar: MultipartFile ): ResponseEntity<UtilizatorDTO>{
+    fun editareInfoUtilizator(@RequestPart("dto") @Valid dto: EditareUtilizatorDTO, @RequestPart("avatar", required = false) avatar: MultipartFile? = null): ResponseEntity<UtilizatorDTO>{
         val user = utilizatorService.editInfoUtilizator(dto, avatar)
         return ResponseEntity.ok(user.toDTO())
     }
