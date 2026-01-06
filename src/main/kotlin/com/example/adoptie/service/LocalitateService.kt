@@ -19,4 +19,6 @@ class LocalitateService(private val localitateRepository: LocalitateRepository) 
      * returneaza locatia pe baza id ului
      */
     fun getLocalitateById(id: Long): Localitate? = localitateRepository.findById(id).orElseThrow{IllegalArgumentException("Localitate $id not found")}
+
+    fun getLocalitati(): List<Localitate> = localitateRepository.findAll().sortedBy {it.nume}
 }
