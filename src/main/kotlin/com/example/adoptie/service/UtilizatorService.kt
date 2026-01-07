@@ -7,6 +7,8 @@ import com.example.adoptie.model.Utilizator
 import com.example.adoptie.repository.AnunturiRepository
 import com.example.adoptie.repository.LocalitateRepository
 import com.example.adoptie.repository.UtilizatorRepository
+import org.jsoup.Jsoup
+import org.jsoup.safety.Safelist
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.security.core.context.SecurityContextHolder
 import org.springframework.stereotype.Service
@@ -40,6 +42,9 @@ class UtilizatorService(
             this.parola = parolaEncodata
             this.nume = dto.nume.ifBlank { dto.username.replaceFirstChar { if (it.isLowerCase()) it.titlecase(getDefault()) else it.toString() }.replace("[^A-Za-z]".toRegex(), "")  }
             this.avatar = "/imagini/avatar.png"
+            this.email = Jsoup.clean(dto.email.trim(), Safelist.none())
+            this.username = Jsoup.clean(dto.username.trim(), Safelist.none())
+            this.nume = Jsoup.clean(dto.nume.trim(), Safelist.none())
         }
         return(utilizatorRepository.save(user))
     }
