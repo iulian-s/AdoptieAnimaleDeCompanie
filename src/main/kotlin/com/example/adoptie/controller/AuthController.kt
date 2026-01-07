@@ -50,10 +50,16 @@ class AuthController(
     }
 
     @PostMapping("/register")
-    fun register(@RequestBody dto: CreareUtilizatorDTO): ResponseEntity<AuthResponse> {
-        val user = utilizatorService.inregistrare(dto)
-        val userDetails = detaliiUtilizatorService.loadUserByUsername(user.username)
-        val jwt = jwtService.generateToken(userDetails)
-        return ResponseEntity.ok(AuthResponse(jwt))
+    fun register(@RequestBody dto: CreareUtilizatorDTO): ResponseEntity<*> {
+        return try{
+            val user = utilizatorService.inregistrare(dto)
+            val userDetails = detaliiUtilizatorService.loadUserByUsername(user.username)
+            val jwt = jwtService.generateToken(userDetails)
+            ResponseEntity.ok(AuthResponse(jwt))
+        } catch (e: IllegalArgumentException) {
+            ResponseEntity.status(409).body(mapOf("error" to e.message))
+        }
+
+
     }
 }
