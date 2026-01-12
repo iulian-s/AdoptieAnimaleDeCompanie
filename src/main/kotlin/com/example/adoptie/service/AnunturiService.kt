@@ -163,7 +163,7 @@ class AnunturiService(
     /**
      *Metoda prin care utilizatorul isi modifica propriile anunturi
      */
-    fun editareAnuntPropriu(id: Long, dto: AnuntDTO): Anunt{
+    fun editareAnuntPropriu(id: Long, dto: AnuntDTO, noiImagini: List<MultipartFile>?): Anunt{
         val auth = SecurityContextHolder.getContext().authentication
         val user = utilizatorRepository.findByUsername(auth.name) ?: throw IllegalArgumentException("Nu am gasit utilizatorul ${auth.name}")
         val anunt = anunturiRepository.findById(id).orElseThrow { IllegalArgumentException("Anuntul cu id $id nu exista!") }
@@ -175,9 +175,20 @@ class AnunturiService(
             rasa = dto.rasa
             gen = dto.gen
             varsta = dto.varsta
-            listaImagini = dto.listaImagini
             locatie = localitateRepository.findById(dto.locatieId)
                 .orElseThrow { IllegalArgumentException("Localitate invalida") }
+
+            if (!noiImagini.isNullOrEmpty()) {
+                val pathuriNoi = saveImages(noiImagini)
+//                val imaginiFinale = anunt.listaImagini.toMutableList()
+//                imaginiFinale.addAll(pathuriNoi)
+                //listaImagini = imaginiFinale
+                listaImagini = pathuriNoi.toMutableList()
+            } else {
+                // Dacă nu s-au trimis imagini noi, păstrăm ce a venit în DTO
+                // (util în cazul în care userul a șters una din cele vechi în UI)
+                listaImagini = dto.listaImagini.toMutableList()
+            }
 
             // permit doar schimbarea intre ACTIV si INACTIV
             if (dto.stare == Stare.ACTIV || dto.stare == Stare.INACTIV) {

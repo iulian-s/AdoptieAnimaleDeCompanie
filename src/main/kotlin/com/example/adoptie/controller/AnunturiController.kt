@@ -105,9 +105,14 @@ class AnunturiController (
      * Metoda pentru editarea unui anunt de catre utilizatorul care l-a creat
      */
     //@PreAuthorize("hasRole('USER')")
-    @PutMapping("/eu/{id}")
-    fun editareAnuntPropriu(@PathVariable id: Long, @RequestBody @Valid dto: AnuntDTO): ResponseEntity<AnuntDTO>{
-        val anunt = anunturiService.editareAnuntPropriu(id, dto)
+    @PutMapping("/eu/{id}", consumes = ["multipart/form-data"])
+    fun editareAnuntPropriu(
+        @PathVariable id: Long,
+        @RequestPart("dto") @Valid dto: AnuntDTO,
+        @RequestPart("imagini", required = false) noiImagini: List<MultipartFile>?
+
+    ): ResponseEntity<AnuntDTO>{
+        val anunt = anunturiService.editareAnuntPropriu(id, dto, noiImagini)
         return ResponseEntity.ok(anunt.toDTO())
     }
 
