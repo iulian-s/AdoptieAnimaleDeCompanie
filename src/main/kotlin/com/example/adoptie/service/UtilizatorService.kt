@@ -75,17 +75,26 @@ class UtilizatorService(
     fun editInfoUtilizator(dto: EditareUtilizatorDTO, avatar: MultipartFile?):Utilizator{
         val auth = SecurityContextHolder.getContext().authentication
         val user = utilizatorRepository.findByUsername(auth.name)?: throw IllegalArgumentException("Nu am gasit informatii pentru utilizatorul ${auth.name}")
-//        val localitate = localitateRepository.findById(dto.localitateId).orElseThrow{IllegalArgumentException("Localitatea cu id ${dto.localitateId} nu exista!")}
-//        val anunturi = anunturiRepository.findByUtilizator_Id(user.id).toMutableList()
-//        val utilizator = dto.toEntity(localitate, anunturi)
-//        val oldAvatar = user.avatar
-//
-        val parolaEncodata = passwordEncoder.encode(dto.parola)
+//        val parolaEncodata = passwordEncoder.encode(dto.parola)
+//        user.apply {
+//            //this.email = dto.email
+//            //this.parola = parolaEncodata
+//            this.nume = dto.nume
+//            this.localitate = localitateRepository.findById(dto.localitateId).orElse(null)
+//            this.telefon = dto.telefon
+//            if (avatar != null) {
+//                this.avatar = saveImage(avatar)
+//            }
+//        }
+        if (!dto.parolaVeche.isNullOrBlank() && !dto.parolaNoua.isNullOrBlank()){
+            if (passwordEncoder.matches(dto.parolaVeche, user.parola)) {
+                user.parola = passwordEncoder.encode(dto.parolaNoua)
+            } else {
+                throw IllegalArgumentException("Parola actuală este incorectă!")
+            }
+        }
         user.apply {
-            this.email = dto.email
-            this.parola = parolaEncodata
             this.nume = dto.nume
-            this.localitate = localitateRepository.findById(dto.localitateId).orElse(null)
             this.telefon = dto.telefon
             if (avatar != null) {
                 this.avatar = saveImage(avatar)
