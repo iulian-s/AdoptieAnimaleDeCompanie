@@ -10,14 +10,17 @@ import java.time.LocalDateTime
  */
 data class EditareUtilizatorDTO(
     val id: Long = 0,
-    @field:NotBlank(message = "Campul trebuie completat!")
+    //@field:NotBlank(message = "Campul trebuie completat!")
     val username: String = "",
 
-    @field:NotBlank(message = "Campul trebuie completat!")
+    //@field:NotBlank(message = "Campul trebuie completat!")
     var parola: String = "",
 
-    @field:Email(message = "Email invalid!")
-    val email: String = "",
+    //@field:Email(message = "Email invalid!")
+    //val email: String = "",
+
+    val parolaVeche: String? = null,
+    val parolaNoua: String? = null,
 
     val rol: Rol = Rol.USER,
     var nume: String = "",

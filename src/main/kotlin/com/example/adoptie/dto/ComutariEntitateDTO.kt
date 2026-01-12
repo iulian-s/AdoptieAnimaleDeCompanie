@@ -79,7 +79,7 @@ fun EditareUtilizatorDTO.toEntity(localitate: Localitate, anunturi: List<Anunt>?
     id = this.id,
     username = this.username,
     parola = this.parola,
-    email = this.email,
+    //email = this.email,
     nume = this.nume,
     rol = this.rol,
     localitate = localitate,
