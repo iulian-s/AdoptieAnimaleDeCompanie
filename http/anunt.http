@@ -38,7 +38,7 @@ GET http://localhost:8080/api/anunturi/eu/anunturi
 Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJyb2xlIjoiUk9MRV9VU0VSIiwic3ViIjoidXNlciIsImlhdCI6MTc2Mzk5NDAwMSwiZXhwIjoxNzY0MDgwNDAxfQ.gsj-Zag_OmjcS8133AvQ2DRR64kaFaQ00l3awa96TLs
 
 ###update anunt de catre admin
-PUT http://localhost:8080/api/anunturi/1
+POST http://localhost:8080/api/anunturi
 Content-Type: application/json
 Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJyb2xlIjoiUk9MRV9VU0VSIiwic3ViIjoidXNlciIsImlhdCI6MTc2NTIwNTQ4MiwiZXhwIjoxNzY1MjkxODgyfQ.TfD-adyeIDO0MBs4q2Upu0VIhjxxhi6_u6luRUhnpFY
 
@@ -62,7 +62,7 @@ GET http://localhost:8080/api/anunturi/neverificate
 
 ###anunturi in raza de x km fata de locatia utilizatorului
 GET http://localhost:8080/api/anunturi/razaUser
-Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJyb2xlIjoiUk9MRV9VU0VSIiwic3ViIjoidXNlciIsImlhdCI6MTc2Mzk5NDAwMSwiZXhwIjoxNzY0MDgwNDAxfQ.gsj-Zag_OmjcS8133AvQ2DRR64kaFaQ00l3awa96TLs
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJyb2xlIjoiUk9MRV9VU0VSIiwic3ViIjoidXNlciIsImlhdCI6MTc2NDk0ODcwNiwiZXhwIjoxNzY1MDM1MTA2fQ.d-N_o-vGsE8Xdh2oeh3Zp8WBogVO7BHovGIe-_NnQLo
 
 ###anunturi in raza de x km fata de locatia aleasa
 GET http://localhost:8080/api/anunturi/razaLocalitate?localitateId=13&razaKm=30

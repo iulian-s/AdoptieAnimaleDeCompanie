@@ -30,7 +30,7 @@ class AnunturiController (
     /**
      * Metoda pentru afisare anunturi intr-o raza aleasa, in functie de  locatia utilizatorului
      */
-    //@PreAuthorize("hasRole('USER')")
+    @PreAuthorize("hasRole('USER')")
     @GetMapping("/razaUser")
     fun getAnunturiInRaza(@RequestParam(required = false) razaKm: Double = 5.0): ResponseEntity<List<AnuntDTO>>
     = ResponseEntity.ok(anunturiService.getAnunturiInRazaFataDeLocatiaUserului(razaKm).map{it.toDTO()})
@@ -38,7 +38,7 @@ class AnunturiController (
     /**
      * Metoda pentru afisare anunturi intr-o raza aleasa, in functie de  locatia aleasa de utilizator
      */
-    //@PreAuthorize("hasRole('USER')")
+    @PreAuthorize("hasRole('USER')")
     @GetMapping("/razaLocalitate")
     fun getAnunturiInRaza(
         @RequestParam localitateId: Long,
@@ -50,7 +50,7 @@ class AnunturiController (
     /**
      * Metoda pentru crearea unui anunt
      */
-    //@PreAuthorize("hasRole('USER')")
+    @PreAuthorize("hasRole('USER')")
     @PostMapping(consumes = ["multipart/form-data"])
     fun creareAnunt(
         @RequestPart("anunt") @Valid dto: CreareAnuntDTO,
@@ -64,7 +64,7 @@ class AnunturiController (
     /**
      * Metoda pentru vizualizarea tuturor anunturilor
      */
-    //@PreAuthorize("hasRole('ADMIN')")
+    @PreAuthorize("hasRole('ADMIN')")
     @GetMapping
     fun vizualizareAnunturi(): ResponseEntity<List<AnuntDTO>>{
         val anunturi = anunturiService.vizualizareAnunturi()
@@ -74,7 +74,7 @@ class AnunturiController (
     /**
      * Metoda pentru vizualizarea tuturor anunturilor neverificate
      */
-    //@PreAuthorize("hasRole('ADMIN')")
+    @PreAuthorize("hasRole('ADMIN')")
     @GetMapping("/neverificate")
     fun vizualizareAnunturiNeverificate(): ResponseEntity<List<AnuntDTO>>{
         val anunturi = anunturiService.vizualizareAnunturiNeverificate()
@@ -94,7 +94,7 @@ class AnunturiController (
     /**
      * Metoda pentru editarea unui anunt de catre admin
      */
-    //@PreAuthorize("hasRole('ADMIN')")
+    @PreAuthorize("hasRole('ADMIN')")
     @PutMapping("/{id}")
     fun editareAnunt(@PathVariable id: Long, @RequestBody @Valid dto: AnuntDTO): ResponseEntity<AnuntDTO>{
         val anunt = anunturiService.editareAnunt(id, dto)
@@ -104,7 +104,7 @@ class AnunturiController (
     /**
      * Metoda pentru editarea unui anunt de catre utilizatorul care l-a creat
      */
-    //@PreAuthorize("hasRole('USER')")
+    @PreAuthorize("hasRole('USER')")
     @PutMapping("/eu/{id}", consumes = ["multipart/form-data"])
     fun editareAnuntPropriu(
         @PathVariable id: Long,
@@ -119,7 +119,7 @@ class AnunturiController (
     /**
      * Metoda pentru stergerea unui anunt de catre admin
      */
-    //@PreAuthorize("hasRole('ADMIN')")
+    @PreAuthorize("hasRole('ADMIN')")
     @DeleteMapping("/{id}")
     fun stergeAnunt(@PathVariable id: Long): ResponseEntity<String> {
         anunturiService.stergereAnunt(id)
@@ -129,7 +129,7 @@ class AnunturiController (
     /**
      * Metoda pentru afisarea anunturilor unui utilizator
      */
-    //@PreAuthorize("hasRole('USER')")
+    @PreAuthorize("hasRole('USER')")
     @GetMapping("/eu/anunturi")
     fun vizualizareAnunturiProprii(): ResponseEntity<List<AnuntDTO>>{
         val anunturi = anunturiService.anunturiUtilizator()

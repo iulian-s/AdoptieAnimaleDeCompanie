@@ -25,7 +25,7 @@ class UtilizatorController(private val utilizatorService: UtilizatorService) {
     /**
      * API dedicat adminului pentru listarea tuturor utilizatorilor
      */
-    //@PreAuthorize("hasRole('ADMIN')")
+    @PreAuthorize("hasRole('ADMIN')")
     @GetMapping
     fun listareUtilizatori(): ResponseEntity<List<UtilizatorDTO>>{
         val utilizatori = utilizatorService.listareUtilizatori()
@@ -34,7 +34,7 @@ class UtilizatorController(private val utilizatorService: UtilizatorService) {
     /**
      * API dedicat adminului pentru listarea informatiilor unui utilizator selectat pe baza id ului
      */
-    //@PreAuthorize("hasRole('ADMIN')")
+    //@PreAuthorize("hasRole('USER') or hasRole('ADMIN')")
     @GetMapping("/{id}")
     fun citireUtilizatorPeBazaId(@PathVariable id: Long): ResponseEntity<UtilizatorDTO>{
         val utilizator = utilizatorService.citireUtilizatorById(id)
@@ -43,7 +43,7 @@ class UtilizatorController(private val utilizatorService: UtilizatorService) {
     /**
      * API dedicat adminului pentru listarea informatiilor unui utilizator selectat pe baza id ului
      */
-    //@PreAuthorize("hasRole('ADMIN')")
+    @PreAuthorize("hasRole('ADMIN')")
     @DeleteMapping("/{id}")
     fun stergereUtilizatorPeBazaId(@PathVariable id: Long): ResponseEntity<String>{
         utilizatorService.stergereUtilizator(id)
@@ -53,7 +53,7 @@ class UtilizatorController(private val utilizatorService: UtilizatorService) {
     /**
      * API dedicat utilizatorului pentru a vizualiza informatiile personale
      */
-    //@PreAuthorize("hasRole('USER')")
+    @PreAuthorize("hasRole('USER')")
     @GetMapping("/eu")
     fun infoUtilizator(): ResponseEntity<UtilizatorDTO>{
         val user = utilizatorService.infoUtilizator()
@@ -63,7 +63,7 @@ class UtilizatorController(private val utilizatorService: UtilizatorService) {
     /**
      * API dedicat utilizatorului pentru a edita informatiile personale
      */
-    //@PreAuthorize("hasRole('USER')")
+    @PreAuthorize("hasRole('USER')")
     @PutMapping("/edit", consumes = ["multipart/form-data"])
     fun editareInfoUtilizator(@RequestPart("dto") @Valid dto: EditareUtilizatorDTO, @RequestPart("avatar", required = false) avatar: MultipartFile? = null): ResponseEntity<UtilizatorDTO>{
         val user = utilizatorService.editInfoUtilizator(dto, avatar)
@@ -72,7 +72,7 @@ class UtilizatorController(private val utilizatorService: UtilizatorService) {
     /**
      * API dedicat utilizatorului pentru a-si sterge contul
      */
-    //@PreAuthorize("hasRole('USER')")
+    @PreAuthorize("hasRole('USER')")
     @DeleteMapping
     fun stergereContUtilizator(): ResponseEntity<String> {
         utilizatorService.stergeContUtilizator()
