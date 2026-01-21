@@ -6,7 +6,7 @@ export default function DetaliiUtilizator(){
     const { id } = useParams();
     const [utilizator, setUtilizator] = useState(null);
     const [judet, setJudet] = useState("");
-    const [localitate, setLocalitate] = useState("");
+    //const [localitate, setLocalitate] = useState("");
 
 
 
@@ -16,9 +16,9 @@ export default function DetaliiUtilizator(){
                 const resUtilizator = await api.get(`/utilizator/${id}`)
                 setUtilizator(resUtilizator.data)
 
-                const resLocalitate = await api.get(`/localitati/${resUtilizator.data.localitateId}`);
-                setLocalitate(resLocalitate.data.nume);
-                setJudet(resLocalitate.data.judet);
+                // const resLocalitate = await api.get(`/localitati/${resUtilizator.data.localitateId}`);
+                // setLocalitate(resLocalitate.data.nume);
+                // setJudet(resLocalitate.data.judet);
             } catch (err) {
             console.error(err);
         }
@@ -67,9 +67,9 @@ export default function DetaliiUtilizator(){
                 Nume: {utilizator.nume}
             </p>
 
-            <p style={{ lineHeight: "1.6", fontSize: "16px", color: "#333", textAlign: "justify" }}>
-                Id-ul locatiei: {utilizator.localitateId}, Judet: {judet}, Localitate: {localitate}
-            </p>
+            {/*<p style={{ lineHeight: "1.6", fontSize: "16px", color: "#333", textAlign: "justify" }}>*/}
+            {/*    Id-ul locatiei: {utilizator.localitateId}, Judet: {judet}, Localitate: {localitate}*/}
+            {/*</p>*/}
 
             <p style={{ lineHeight: "1.6", fontSize: "16px", color: "#333", textAlign: "justify" }}>
                 Telefon: {utilizator.telefon}

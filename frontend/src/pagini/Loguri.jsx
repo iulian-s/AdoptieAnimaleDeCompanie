@@ -26,7 +26,9 @@ export default function Loguri(){
                 </tr>
                 </thead>
                 <tbody>
-                {loguri.map((a)=> (
+                {loguri
+                    .toSorted((a, b) => new Date(b.timestamp) - new Date(a.timestamp))
+                    .map((a)=> (
                     <tr key={a.id}>
                         <td>{a.id}</td>
                         <td>{a.username}</td>

@@ -10,10 +10,26 @@ export default function Anunturi() {
     const [sortType, setSortType] = useState("id_desc");
 
     useEffect(() => {
-        api.get("/anunturi")
-            .then((res) => setAnunturi(res.data))
-            .catch((err) => console.error(err));
+        let isMounted = true;
+
+        const fetchAnunturi = async () => {
+            try {
+                const res = await api.get("/anunturi");
+                if (isMounted) setAnunturi(res.data);
+            } catch (err) {
+                console.error(err);
+            }
+        };
+
+        fetchAnunturi();
+        const interval = setInterval(fetchAnunturi, 5000);
+
+        return () => {
+            isMounted = false;
+            clearInterval(interval);
+        };
     }, []);
+
 
     // Filtrare + cautare + sortare
     const anunturiFiltrate = anunturi

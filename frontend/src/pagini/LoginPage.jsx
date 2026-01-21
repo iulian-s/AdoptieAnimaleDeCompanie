@@ -64,9 +64,9 @@ export default function LoginPage() {
                 />
                 <div style={{ display: "flex", gap: "10px" }}>
                     <button type="submit">Autentificare</button>
-                    <button type="button" onClick={() => navigate("/register")}>
-                        Register
-                    </button>
+                    {/*<button type="button" onClick={() => navigate("/register")}>*/}
+                    {/*    Register*/}
+                    {/*</button>*/}
                 </div>
             </form>
             {error && <p style={{ color: "red" }}>{error}</p>}
