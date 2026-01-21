@@ -7,6 +7,7 @@ import org.springframework.security.authentication.AuthenticationManager
 import org.springframework.security.authentication.AuthenticationProvider
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration
+import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity
 import org.springframework.security.config.annotation.web.builders.HttpSecurity
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity
 import org.springframework.security.config.annotation.web.configuration.WebSecurityCustomizer
@@ -23,6 +24,7 @@ import org.springframework.web.cors.UrlBasedCorsConfigurationSource
  * Clasa care gestioneaza functia de login si criptarea parolei
  */
 @EnableWebSecurity
+@EnableMethodSecurity
 @Configuration
 class ConfigSpringSecurity(
     private val jwtAuthFilter: JwtAuthFilter,
@@ -41,11 +43,14 @@ class ConfigSpringSecurity(
             .authorizeHttpRequests {
                 it.requestMatchers("/api/auth/**").permitAll() // deschide endpointuri pt logare si inregistrare
                 it.requestMatchers("/api/animalute/**").permitAll()
-                it.requestMatchers("/api/**").permitAll() //TREBUIE STEARSA NEAPARAT DUPA TESTARE
+                //it.requestMatchers("/api/**").permitAll() //TREBUIE STEARSA NEAPARAT DUPA TESTARE
                 it.requestMatchers("/imagini/**").permitAll()
-                it.requestMatchers("/localitati/**").permitAll()
-                it.requestMatchers("/utilizator/**").permitAll()
                 it.requestMatchers("/logs").permitAll()
+                it.requestMatchers(org.springframework.http.HttpMethod.GET, "/api/anunturi/**").permitAll()
+                it.requestMatchers(org.springframework.http.HttpMethod.GET, "/api/utilizator/**").permitAll()
+                it.requestMatchers(org.springframework.http.HttpMethod.GET, "/api/localitati/**").permitAll()
+                it.anyRequest().authenticated()
+
 
             }
             .sessionManagement {
