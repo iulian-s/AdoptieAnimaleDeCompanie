@@ -38,7 +38,7 @@ class AnunturiController (
     /**
      * Metoda pentru afisare anunturi intr-o raza aleasa, in functie de  locatia aleasa de utilizator
      */
-    @PreAuthorize("hasRole('USER')")
+    //@PreAuthorize("hasRole('USER')")
     @GetMapping("/razaLocalitate")
     fun getAnunturiInRaza(
         @RequestParam localitateId: Long,
