@@ -19,13 +19,13 @@ class DbPropertyLogger(
 
     private val log = LoggerFactory.getLogger(DbPropertyLogger::class.java)
 
-    @PostConstruct
-    fun logProps() {
-        log.info("SPRING DB_HOST = {}", host)
-        log.info("SPRING DB_PORT = {}", port)
-        log.info("SPRING DB_NAME = {}", name)
-        log.info("SPRING DB_USER = {}", user)
-        log.info("SPRING DB_PASSWORD = {}", password)
-        log.info("JWT SECRET = {}", jwtSecret)
-    }
+//    @PostConstruct
+//    fun logProps() {
+//        log.info("SPRING DB_HOST = {}", host)
+//        log.info("SPRING DB_PORT = {}", port)
+//        log.info("SPRING DB_NAME = {}", name)
+//        log.info("SPRING DB_USER = {}", user)
+//        log.info("SPRING DB_PASSWORD = {}", password)
+//        log.info("JWT SECRET = {}", jwtSecret)
+//    }
 }
