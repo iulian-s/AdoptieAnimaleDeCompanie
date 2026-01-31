@@ -27,6 +27,7 @@ class AnunturiService(
     private val anunturiRepository: AnunturiRepository,
     private val utilizatorRepository: UtilizatorRepository,
     private val localitateRepository: LocalitateRepository,
+    private val moderareService: ModerareService,
 ) {
 
     /**
@@ -94,8 +95,16 @@ class AnunturiService(
         val user = utilizatorRepository.findByUsername(auth.name) ?: throw IllegalArgumentException("Nu am gasit informatii despre utilizatorul ${auth.name}")
 
         val imagePaths = saveImages(imagini) //returneaza lista de string
+        val esteSafe = moderareService.suntToateImaginileSafe(imagini)
+
         val anunt = dto.toEntity(user, localitateRepository.findById(dto.locatieId).orElseThrow{IllegalArgumentException("Localitatea cu id ${dto.locatieId} nu exista!")})
         anunt.listaImagini = imagePaths.toMutableList()
+        if(esteSafe){
+            anunt.stare = Stare.ACTIV
+        } else {
+            anunt.stare = Stare.NEVERIFICAT
+            println("Anunțul creat de ${user.username} a fost trimis la moderare manuală (imagini suspecte).")
+        }
         return anunturiRepository.save(anunt)
     }
 
@@ -178,7 +187,9 @@ class AnunturiService(
             locatie = localitateRepository.findById(dto.locatieId)
                 .orElseThrow { IllegalArgumentException("Localitate invalida") }
 
-            if (!noiImagini.isNullOrEmpty()) {
+            val esteSafe = moderareService.suntToateImaginileSafe(noiImagini)
+
+            if (!noiImagini.isNullOrEmpty() && esteSafe) {
                 val pathuriNoi = saveImages(noiImagini)
 //                val imaginiFinale = anunt.listaImagini.toMutableList()
 //                imaginiFinale.addAll(pathuriNoi)
@@ -190,11 +201,13 @@ class AnunturiService(
                 listaImagini = dto.listaImagini.toMutableList()
             }
 
+
             // permit doar schimbarea intre ACTIV si INACTIV
             if (dto.stare == Stare.ACTIV || dto.stare == Stare.INACTIV) {
                 stare = dto.stare
             }
         }
+
         return anunturiRepository.save(anunt)
     }
 
