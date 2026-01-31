@@ -32,6 +32,7 @@ class JwtAuthFilter(
         }
 
         val jwt = authHeader.substring(7)
+        try{
         val username = jwtService.extractUsername(jwt)
 
         if(username != null && SecurityContextHolder.getContext().authentication == null){
@@ -45,6 +46,13 @@ class JwtAuthFilter(
                 authToken.details = WebAuthenticationDetailsSource().buildDetails(request)
                 SecurityContextHolder.getContext().authentication = authToken
             }
+        }
+        } catch (ex: io.jsonwebtoken.ExpiredJwtException) {
+            response.status = HttpServletResponse.SC_UNAUTHORIZED
+            return
+        } catch (ex: Exception) {
+            response.status = HttpServletResponse.SC_UNAUTHORIZED
+            return
         }
         filterChain.doFilter(request, response)
     }
