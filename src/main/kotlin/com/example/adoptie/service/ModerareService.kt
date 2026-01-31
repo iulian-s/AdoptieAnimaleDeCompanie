@@ -10,24 +10,32 @@ import ai.djl.repository.zoo.Criteria
 import ai.djl.repository.zoo.ZooModel
 import ai.djl.training.util.ProgressBar
 import jakarta.annotation.PostConstruct
+import org.springframework.beans.factory.annotation.Value
 import org.springframework.stereotype.Service
 import org.springframework.web.multipart.MultipartFile
-import java.io.FileInputStream
+import java.io.FileNotFoundException
+import java.nio.file.Files
 import java.nio.file.Paths
 
 @Service
 class ModerareService {
+    @Value("\${model.ai.path}")
+    private lateinit var modelPathStr: String
     private lateinit var model: ZooModel<Image, Classifications>
 
     @PostConstruct
     fun init() {
-        val modelDir = Paths.get("src/main/resources/nsfw_model/nsfw_model.onnx")
         val synsets = listOf("normal", "nsfw")
+        val path = Paths.get(modelPathStr)
+
+        if (!Files.exists(path)) {
+            throw IllegalStateException("Modelul AI nu a fost găsit la calea: ${path.toAbsolutePath()}")
+        }
 
         val criteria = Criteria.builder()
             .setTypes(Image::class.java, Classifications::class.java)
             .optEngine("OnnxRuntime")
-            .optModelPath(modelDir)
+            .optModelPath(path)
             .optTranslator(
                 ImageClassificationTranslator.builder()
                     .addTransform(Resize(224, 224)) // Modelul Falconsai folosește 224x224

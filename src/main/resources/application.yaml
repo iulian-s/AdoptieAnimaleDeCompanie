@@ -27,3 +27,7 @@ jwt:
 app:
   upload:
     dir: ${user.home}/pet-adoption/uploads/imagini
+
+model:
+  ai:
+    path: ./nsfw_model/nsfw_model.onnx
