@@ -122,10 +122,14 @@ class UtilizatorService(
     /**
      * Metoda de stergere a contului utilizatorului autentificat
      */
-    fun stergeContUtilizator(){
+    fun stergeContUtilizator(parolaTrimisa: String): Boolean{
         val auth = SecurityContextHolder.getContext().authentication
-        val user = utilizatorRepository.findByUsername(auth.name)?: throw IllegalArgumentException("Nu am gasit informatii pentru utilizatorul ${auth.name}")
+        val user = utilizatorRepository.findByUsername(auth.name)?: return false
+        if (!passwordEncoder.matches(parolaTrimisa, user.parola)) {
+            return false
+        }
         utilizatorRepository.delete(user)
+        return true
     }
 
 

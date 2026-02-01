@@ -28,7 +28,10 @@ class LocalitateController (
     @GetMapping("/{id}")
     fun intoarceLocalitatePeBazaId(@PathVariable id: Long): ResponseEntity<LocalitateDTO> {
         val localitate = localitateService.getLocalitateById(id)
-        return ResponseEntity.ok(localitate?.toDTO())
+        return if(localitate != null)ResponseEntity.ok(localitate.toDTO())
+        else {
+            ResponseEntity.notFound().build()
+        }
     }
 
     @GetMapping("/judete")
