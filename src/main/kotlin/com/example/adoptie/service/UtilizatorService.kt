@@ -28,6 +28,7 @@ class UtilizatorService(
     private val localitateRepository: LocalitateRepository,
     private val anunturiRepository: AnunturiRepository,
     private val localitateService: LocalitateService,
+    private val imagineService: ImagineService
 ) {
     /**
      * Metoda de inregistrare a utilizatorului - creare cont
@@ -41,7 +42,7 @@ class UtilizatorService(
         val user = dto.toEntity(localitate).apply {
             this.parola = parolaEncodata
             this.nume = dto.nume.ifBlank { dto.username.replaceFirstChar { if (it.isLowerCase()) it.titlecase(getDefault()) else it.toString() }.replace("[^A-Za-z]".toRegex(), "")  }
-            this.avatar = "/imagini/avatar.png"
+            this.avatar = "/storage/v1/object/public/uploads/avatar.png"
             this.email = Jsoup.clean(dto.email.trim(), Safelist.none())
             this.username = Jsoup.clean(dto.username.trim(), Safelist.none())
             this.nume = Jsoup.clean(dto.nume.trim(), Safelist.none())
@@ -97,27 +98,27 @@ class UtilizatorService(
             this.nume = dto.nume
             this.telefon = dto.telefon
             if (avatar != null) {
-                this.avatar = saveImage(avatar)
+                this.avatar = imagineService.saveImage(avatar)
             }
         }
         return utilizatorRepository.save(user)
 
     }
 
-    @Value("\${app.upload.dir}")
-    lateinit var uploadDir: String
-
-    fun saveImage(file: MultipartFile): String {
-        val dir = Paths.get(uploadDir)
-        Files.createDirectories(dir)
-
-        val filename = "${System.currentTimeMillis()}_${file.originalFilename}"
-        val target = dir.resolve(filename)
-
-        Files.write(target, file.bytes)
-
-        return "/imagini/$filename"
-    }
+//    @Value("\${app.upload.dir}")
+//    lateinit var uploadDir: String
+//
+//    fun saveImage(file: MultipartFile): String {
+//        val dir = Paths.get(uploadDir)
+//        Files.createDirectories(dir)
+//
+//        val filename = "${System.currentTimeMillis()}_${file.originalFilename}"
+//        val target = dir.resolve(filename)
+//
+//        Files.write(target, file.bytes)
+//
+//        return "/imagini/$filename"
+//    }
 
     /**
      * Metoda de stergere a contului utilizatorului autentificat
@@ -125,6 +126,15 @@ class UtilizatorService(
     fun stergeContUtilizator(parolaTrimisa: String): Boolean{
         val auth = SecurityContextHolder.getContext().authentication
         val user = utilizatorRepository.findByUsername(auth.name)?: return false
+        val anunturiUser = anunturiRepository.findByUtilizator_Id(user.id)
+
+        anunturiUser.forEach { anunt ->
+            imagineService.deleteImages(anunt.listaImagini)
+        }
+        if(user.avatar != "/storage/v1/object/public/uploads/avatar.png"){
+            imagineService.deleteImage(user.avatar)
+        }
+
         if (!passwordEncoder.matches(parolaTrimisa, user.parola)) {
             return false
         }
