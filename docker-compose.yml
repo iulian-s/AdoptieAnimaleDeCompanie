@@ -14,6 +14,10 @@ services:
       - ./dbdata:/var/lib/postgresql/data
     networks:
       - app-network
+
+networks:
+  app-network:
+
 #  app:
 #    build: .
 #    container_name: adoptie_app
@@ -27,5 +31,3 @@ services:
 #      DB_PASSWORD: ${DB_PASSWORD}
 #    networks:
 #      - app-network
-networks:
-  app-network:

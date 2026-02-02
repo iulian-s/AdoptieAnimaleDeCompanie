@@ -28,6 +28,7 @@ class AnunturiService(
     private val utilizatorRepository: UtilizatorRepository,
     private val localitateRepository: LocalitateRepository,
     private val moderareService: ModerareService,
+    private val imagineService: ImagineService
 ) {
 
     /**
@@ -109,22 +110,22 @@ class AnunturiService(
     }
 
 
-    @Value("\${app.upload.dir}")
-    lateinit var uploadDir: String
+//    @Value("\${app.upload.dir}")
+//    lateinit var uploadDir: String
 
-    fun saveImage(file: MultipartFile): String {
-        val dir = Paths.get(uploadDir)
-        Files.createDirectories(dir)
+//    fun saveImage(file: MultipartFile): String {
+//        val dir = Paths.get(uploadDir)
+//        Files.createDirectories(dir)
+//
+//        val filename = "${System.currentTimeMillis()}_${file.originalFilename}"
+//        val target = dir.resolve(filename)
+//
+//        Files.write(target, file.bytes)
+//
+//        return "/imagini/$filename"
+//    }
 
-        val filename = "${System.currentTimeMillis()}_${file.originalFilename}"
-        val target = dir.resolve(filename)
-
-        Files.write(target, file.bytes)
-
-        return "/imagini/$filename"
-    }
-
-    fun saveImages(files: List<MultipartFile>): List<String> = files.map { saveImage(it) }
+    fun saveImages(files: List<MultipartFile>): List<String> = files.map { imagineService.saveImage(it) }
 
     /**
      * Metoda de listare a tuturor anunturilor active
@@ -190,6 +191,7 @@ class AnunturiService(
             val esteSafe = moderareService.suntToateImaginileSafe(noiImagini)
 
             if (!noiImagini.isNullOrEmpty() && esteSafe) {
+                imagineService.deleteImages(anunt.listaImagini)
                 val pathuriNoi = saveImages(noiImagini)
 //                val imaginiFinale = anunt.listaImagini.toMutableList()
 //                imaginiFinale.addAll(pathuriNoi)
@@ -214,7 +216,12 @@ class AnunturiService(
     /**
      * Metoda de stergere anunt
      */
-    fun stergereAnunt(id:Long) = anunturiRepository.delete(anunturiRepository.findById(id).orElseThrow { IllegalArgumentException("Anuntul cu id $id nu exista!") })
+    fun stergereAnunt(id:Long) {
+        val anunt = anunturiRepository.findById(id).orElseThrow{ IllegalArgumentException("Anuntul cu id $id nu exista!") }
+        imagineService.deleteImages(anunt.listaImagini)
+        anunturiRepository.delete(anunt)
+
+    }
 
     /**
      * Metoda de intoarcere a anunturilor utilizatorului logat
