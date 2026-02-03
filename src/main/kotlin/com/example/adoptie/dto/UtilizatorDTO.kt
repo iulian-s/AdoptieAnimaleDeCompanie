@@ -13,8 +13,8 @@ data class UtilizatorDTO(
     @field:NotBlank(message = "Campul trebuie completat!")
     val username: String = "",
 
-   @field:NotBlank(message = "Campul trebuie completat!")
-    var parola: String = "",
+//   @field:NotBlank(message = "Campul trebuie completat!")
+//    var parola: String = "",
 
     @field:Email(message = "Email invalid!")
     val email: String = "",

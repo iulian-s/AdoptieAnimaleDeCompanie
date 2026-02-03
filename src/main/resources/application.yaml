@@ -34,4 +34,4 @@ app:
 
 model:
   ai:
-    path: ./nsfw_model/nsfw_model.onnx
+    path: ./model/model.onnx

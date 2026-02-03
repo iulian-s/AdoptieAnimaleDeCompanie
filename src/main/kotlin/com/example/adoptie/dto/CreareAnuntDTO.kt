@@ -22,6 +22,8 @@ data class CreareAnuntDTO(
     var varstaMin: Int? = varsta.minLuni,
     var varstaMax: Int? = varsta.maxLuni,
     val utilizatorId: Long = 0,
+    //nu este necesara variabila pentru ca in service am parametru separat pentru imagini, iar lista de imagini din entitate se populeaza din acesta, service ul primeste dto, il converteste, ii aplica instructiuni si l salveaza ca entitate
+    //nu e folosit la niciun request get, asa ca nu e necesara salvarea listei de imagini in acest dto
     //var listaImagini: MutableList<String> = mutableListOf(),
     var stare: Stare = Stare.NEVERIFICAT,
     var locatieId: Long = 0
