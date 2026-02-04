@@ -34,7 +34,7 @@ class UtilizatorController(private val utilizatorService: UtilizatorService) {
         return ResponseEntity.ok(utilizatori.map{it.toDTO()})
     }
     /**
-     * API dedicat adminului pentru listarea informatiilor unui utilizator selectat pe baza id ului
+     * API dedicat pentru listarea informatiilor unui utilizator selectat pe baza id ului
      */
     //@PreAuthorize("hasRole('USER') or hasRole('ADMIN')")
     @GetMapping("/{id}")
@@ -43,7 +43,7 @@ class UtilizatorController(private val utilizatorService: UtilizatorService) {
         return ResponseEntity.ok(utilizator.toDTO())
     }
     /**
-     * API dedicat adminului pentru listarea informatiilor unui utilizator selectat pe baza id ului
+     * API dedicat adminului pentru stergerea informatiilor unui utilizator selectat pe baza id ului
      */
     @PreAuthorize("hasRole('ADMIN')")
     @DeleteMapping("/{id}")

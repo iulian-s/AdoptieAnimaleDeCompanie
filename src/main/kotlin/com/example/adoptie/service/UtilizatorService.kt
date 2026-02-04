@@ -25,7 +25,7 @@ import java.util.Locale.getDefault
 class UtilizatorService(
     private val utilizatorRepository: UtilizatorRepository,
     private val passwordEncoder: PasswordEncoder,
-    private val localitateRepository: LocalitateRepository,
+    //private val localitateRepository: LocalitateRepository,
     private val anunturiRepository: AnunturiRepository,
     private val localitateService: LocalitateService,
     private val imagineService: ImagineService
