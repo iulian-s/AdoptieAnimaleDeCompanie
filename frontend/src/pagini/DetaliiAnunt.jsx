@@ -9,6 +9,7 @@ export default function DetaliiAnunt() {
     const [username, setUsername] = useState("");
     const [nume, setNume] = useState("");
     const [judet, setJudet] = useState("");
+    const baseImageUrl = import.meta.env.VITE_PIC_URL
 
 
     useEffect(() => {
@@ -49,7 +50,7 @@ export default function DetaliiAnunt() {
                 <>
                     <div style={{ width: "100%", height: "450px", overflow: "hidden", borderRadius: "12px", marginBottom: "12px" }}>
                         <img
-                            src={`http://localhost:8080${anunt.listaImagini[currentImg]}`}
+                            src={`${baseImageUrl}${anunt.listaImagini[currentImg]}`}
                             alt={`poza-${currentImg}`}
                             style={{ width: "100%", height: "100%", objectFit: "contain", objectPosition: "center" }}
                         />
@@ -60,7 +61,7 @@ export default function DetaliiAnunt() {
                         {anunt.listaImagini.map((imgUrl, index) => (
                             <img
                                 key={index}
-                                src={`http://localhost:8080${imgUrl}`}
+                                src={`${baseImageUrl}${imgUrl}`}
                                 alt={`thumb-${index}`}
                                 onClick={() => setCurrentImg(index)}
                                 style={{
