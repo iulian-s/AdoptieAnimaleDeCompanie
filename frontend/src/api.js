@@ -1,7 +1,8 @@
 import axios from 'axios';
 
+const apiUrl = import.meta.env.VITE_BACKEND_URL;
 const api = axios.create({
-    baseURL: 'http://localhost:8080/api', //adresa implicita a api-urilor
+    baseURL: `${apiUrl}`, //adresa a api-urilor
 });
 
 //adaugare jwt

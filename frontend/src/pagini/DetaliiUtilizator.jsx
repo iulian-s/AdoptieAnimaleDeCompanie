@@ -7,6 +7,7 @@ export default function DetaliiUtilizator(){
     const [utilizator, setUtilizator] = useState(null);
     const [judet, setJudet] = useState("");
     //const [localitate, setLocalitate] = useState("");
+    const baseImageUrl = import.meta.env.VITE_PIC_URL
 
 
 
@@ -41,7 +42,7 @@ export default function DetaliiUtilizator(){
                 <>
                     <div style={{ width: "100%", height: "45px", overflow: "hidden", borderRadius: "12px", marginBottom: "12px" }}>
                         <img
-                            src={`http://localhost:8080${utilizator.avatar}`}
+                            src={`${baseImageUrl}${utilizator.avatar}`}
                             alt={`poza-nu-exista`}
                             style={{ width: "100%", height: "100%", objectFit: "contain" }}
                         />

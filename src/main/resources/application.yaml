@@ -35,3 +35,8 @@ app:
 model:
   ai:
     path: ./model/model.onnx
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health, metrics, loggers
