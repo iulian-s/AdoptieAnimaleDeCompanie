@@ -13,8 +13,10 @@ import com.example.adoptie.model.Varsta
 import com.example.adoptie.service.AnunturiService
 import com.example.adoptie.service.DetaliiUtilizatorService
 import com.example.adoptie.service.JwtService
+import com.example.adoptie.service.RateLimitService
 import com.example.adoptie.service.anyKotlin
 import com.fasterxml.jackson.databind.ObjectMapper
+import io.github.bucket4j.Bucket
 import org.mockito.ArgumentMatchers.any
 import org.mockito.ArgumentMatchers.eq
 import org.mockito.Mockito.mock
@@ -29,6 +31,11 @@ import org.springframework.context.annotation.ComponentScan
 import org.springframework.context.annotation.FilterType
 import org.springframework.http.MediaType
 import org.springframework.mock.web.MockMultipartFile
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken
+import org.springframework.security.core.Authentication
+import org.springframework.security.core.authority.SimpleGrantedAuthority
+import org.springframework.security.core.context.SecurityContext
+import org.springframework.security.core.context.SecurityContextHolder
 import org.springframework.security.test.context.support.WithMockUser
 import org.springframework.test.context.bean.override.mockito.MockitoBean
 import org.springframework.test.web.servlet.MockMvc
@@ -66,6 +73,8 @@ class AnunturiControllerTest {
 
     @MockitoBean
     private lateinit var logActiuneInterceptor: LogActiuneInterceptor
+    @MockitoBean
+    private lateinit var rateLimitService: RateLimitService
 
     @Test
     fun `returnare lista cu anunturi active cu status 200`() {
@@ -99,6 +108,14 @@ class AnunturiControllerTest {
 
     @Test
     fun `ar trebui sa returneze 200 cand campurile sunt completate`() {
+        // Populate SecurityContext manually
+        val authentication = UsernamePasswordAuthenticationToken(
+            "test_user",
+            "password",
+            listOf(SimpleGrantedAuthority("ROLE_USER"))
+        )
+        SecurityContextHolder.getContext().authentication = authentication
+
         val anuntIncompletJson = """
         {
             "titlu": "Catel", 
@@ -116,11 +133,20 @@ class AnunturiControllerTest {
         val anuntPart = MockMultipartFile(
             "anunt",
             "",
-            "application/json", // CRITIC: Trebuie sa fie application/json
+            "application/json",
             anuntIncompletJson.toByteArray()
         )
 
-        val imaginePart = MockMultipartFile("imagini", "test.jpg", "image/jpeg", "data".toByteArray())
+        val imaginePart = MockMultipartFile(
+            "imagini",
+            "test.jpg",
+            "image/jpeg",
+            "data".toByteArray()
+        )
+
+        val bucket = mock(Bucket::class.java)
+        `when`(bucket.tryConsume(1)).thenReturn(true)
+        `when`(rateLimitService.resolveBucket(anyKotlin())).thenReturn(bucket)
 
         val anuntMock = AnuntDTO(
             id = 100L,
@@ -138,6 +164,7 @@ class AnunturiControllerTest {
             .andDo(print())
             .andExpect(status().isOk)
     }
+
 
 
     @Test
