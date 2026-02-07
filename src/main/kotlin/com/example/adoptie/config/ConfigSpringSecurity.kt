@@ -50,6 +50,7 @@ class ConfigSpringSecurity(
                 it.requestMatchers(org.springframework.http.HttpMethod.GET, "/api/utilizator/**").permitAll()
                 it.requestMatchers(org.springframework.http.HttpMethod.GET, "/api/localitati/**").permitAll()
                 it.requestMatchers(org.springframework.http.HttpMethod.GET, "/actuator/**").permitAll()
+                it.requestMatchers("/", "/index.html",).permitAll()
                 it.anyRequest().authenticated()
 
 

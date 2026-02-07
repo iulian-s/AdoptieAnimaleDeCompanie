@@ -14,6 +14,9 @@ class ImagineService(private val s3Client: S3Client) {
     private lateinit var bucketName: String
 
     fun saveImage(file: MultipartFile): String {
+        if (!esteImagineValida(file)) {
+            throw IllegalArgumentException("Fisierul nu este imagine JPEG/PNG!")
+        }
         val filename = "${System.currentTimeMillis()}_${file.originalFilename}"
         val putObjectRequest = PutObjectRequest.builder()
             .bucket(bucketName)
@@ -44,5 +47,19 @@ class ImagineService(private val s3Client: S3Client) {
 
     fun deleteImages(imageUrls: List<String>) {
         imageUrls.forEach { deleteImage(it) }
+    }
+
+    fun esteImagineValida(file: MultipartFile): Boolean {
+        if (file.size > 5 * 1024 * 1024) return false
+
+        val inputStream = file.inputStream
+        val firstBytes = ByteArray(8)
+        inputStream.read(firstBytes)
+
+        val isJpeg = firstBytes[0] == 0xFF.toByte() && firstBytes[1] == 0xD8.toByte()
+        val isPng = firstBytes[0] == 0x89.toByte() && firstBytes[1] == 0x50.toByte() &&
+                firstBytes[2] == 0x4E.toByte() && firstBytes[3] == 0x47.toByte()
+
+        return isJpeg || isPng
     }
 }
