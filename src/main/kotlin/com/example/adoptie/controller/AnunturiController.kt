@@ -4,9 +4,12 @@ import com.example.adoptie.dto.AnuntDTO
 import com.example.adoptie.dto.CreareAnuntDTO
 import com.example.adoptie.dto.toDTO
 import com.example.adoptie.service.AnunturiService
+import com.example.adoptie.service.RateLimitService
 import jakarta.validation.Valid
+import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
 import org.springframework.security.access.prepost.PreAuthorize
+import org.springframework.security.core.context.SecurityContextHolder
 import org.springframework.web.bind.annotation.DeleteMapping
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.PathVariable
@@ -18,6 +21,7 @@ import org.springframework.web.bind.annotation.RequestParam
 import org.springframework.web.bind.annotation.RequestPart
 import org.springframework.web.bind.annotation.RestController
 import org.springframework.web.multipart.MultipartFile
+import org.springframework.web.server.ResponseStatusException
 
 /**
  * Controller ce expune endpoint-uri pentru gestiunea actiunilor asupra entitatii Anunt
@@ -25,7 +29,8 @@ import org.springframework.web.multipart.MultipartFile
 @RestController
 @RequestMapping("/api/anunturi")
 class AnunturiController (
-    val anunturiService: AnunturiService
+    val anunturiService: AnunturiService,
+    val rateLimitService: RateLimitService
 ){
     /**
      * Metoda pentru afisare anunturi intr-o raza aleasa, in functie de  locatia utilizatorului
@@ -57,6 +62,11 @@ class AnunturiController (
         @RequestPart("imagini") imagini: List<MultipartFile>
 
     ): ResponseEntity<AnuntDTO>{
+        val username = SecurityContextHolder.getContext().authentication.name
+        val bucket = rateLimitService.resolveBucket("rate_limit:anunturi:$username")
+        if(!bucket.tryConsume(1)){
+            throw ResponseStatusException(HttpStatus.TOO_MANY_REQUESTS,"Limita atinsa, incearca mai tarziu.")
+        }
         val anunt = anunturiService.creareAnunt(dto, imagini)
         return ResponseEntity.ok(anunt.toDTO())
     }
