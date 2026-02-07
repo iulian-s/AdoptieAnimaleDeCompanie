@@ -1,0 +1,10 @@
+dbdata/
+frontend/
+.idea
+.env
+http/
+target/
+.git
+.mvn
+mvnw
+mvnw.cmd
