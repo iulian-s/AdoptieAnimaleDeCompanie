@@ -19,7 +19,6 @@ jobs:
           git lfs install
           git lfs pull
 
-
       - name: Push to Hub
         env:
           HF_TOKEN: ${{ secrets.HF_TOKEN }}
@@ -32,5 +31,5 @@ jobs:
         
           git lfs install
           
-        # fortam ca sa nu existe probleme cu push-ul
+          #fortam ca sa nu existe probleme cu push-ul
           git push --force https://$HF_USERNAME:$HF_TOKEN@huggingface.co/spaces/$HF_USERNAME/$SPACE_NAME master:main
