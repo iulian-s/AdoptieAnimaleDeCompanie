@@ -1,0 +1,35 @@
+name: Sync to Hugging Face Hub
+
+on:
+  push:
+    branches: [master] # Schimbat din main în master
+
+jobs:
+  sync-to-hub:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+          lfs: true # Aceasta e bine, dar uneori nu e suficient
+
+      - name: Install and Pull LFS
+        run: |
+          git lfs install
+          git lfs pull
+
+      - name: Push to Hub
+        env:
+          HF_TOKEN: ${{ secrets.HF_TOKEN }}
+          HF_USERNAME: "iulian-s"
+          SPACE_NAME: "adoptie"
+        run: |
+          git config --global user.email "github-actions@github.com"
+          git config --global user.name "GitHub Actions"
+          
+          # IMPORTANT: Forțăm Git LFS să verifice fișierele înainte de push
+          git lfs install
+          
+          # Trimitem master local către main remote
+          git push --force https://$HF_USERNAME:$HF_TOKEN@huggingface.co/spaces/$HF_USERNAME/$SPACE_NAME master:main

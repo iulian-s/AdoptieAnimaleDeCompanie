@@ -1,0 +1,69 @@
+POST http://localhost:8080/api/anunturi
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJyb2xlIjoiUk9MRV9VU0VSIiwic3ViIjoidXNlciIsImlhdCI6MTc2NTIwNTQ4MiwiZXhwIjoxNzY1MjkxODgyfQ.TfD-adyeIDO0MBs4q2Upu0VIhjxxhi6_u6luRUhnpFY
+
+{
+  "titlu": "Dau spre adoptie dragon cu barba",
+  "descriere": "Dau spre adoptie soparla - dragon cu barba, prietenos si afectuos",
+  "specie": "Soparla",
+  "rasa": "Dragon cu barba",
+  "gen": "FEMELA",
+  "varsta": "CINCI_PLUS_ANI",
+  "utilizatorId": 2,
+  "listaImagini": [],
+  "stare": "NEVERIFICAT",
+  "locatieId": 3
+}
+
+###update anunt de catre user
+#PUT http://localhost:8080/api/anunturi/eu/1
+#Content-Type: application/json
+#Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJyb2xlIjoiUk9MRV9VU0VSIiwic3ViIjoidXNlciIsImlhdCI6MTc2Mzk5NDAwMSwiZXhwIjoxNzY0MDgwNDAxfQ.gsj-Zag_OmjcS8133AvQ2DRR64kaFaQ00l3awa96TLs
+#
+#{
+#  "titlu": "Pisicuta mica si dragalasa",
+#  "descriere": "Dau spre adoptie un pui de pisica persana de aproximativ 6 luni, fetita, deparazitata",
+#  "specie": "Pisica",
+#  "rasa": "Alta rasa",
+#  "gen": "FEMELA",
+#  "varsta": "TREI_SASE_LUNI",
+#  "utilizatorId": 2,
+#  "listaImagini": ["/imagini/cat1.jpg", "/imagini/cat2.jpg", "/imagini/cat3.jpg"],
+#  "stare": "NEVERIFICAT",
+#  "locatieId": 3
+#}
+
+###anunturi proprii
+GET http://localhost:8080/api/anunturi/eu/anunturi
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJyb2xlIjoiUk9MRV9VU0VSIiwic3ViIjoidXNlciIsImlhdCI6MTc2Mzk5NDAwMSwiZXhwIjoxNzY0MDgwNDAxfQ.gsj-Zag_OmjcS8133AvQ2DRR64kaFaQ00l3awa96TLs
+
+###update anunt de catre admin
+POST http://localhost:8080/api/anunturi
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJyb2xlIjoiUk9MRV9VU0VSIiwic3ViIjoidXNlciIsImlhdCI6MTc2NTIwNTQ4MiwiZXhwIjoxNzY1MjkxODgyfQ.TfD-adyeIDO0MBs4q2Upu0VIhjxxhi6_u6luRUhnpFY
+
+{
+  "titlu": "Pisicuta mica si dragalasa",
+  "descriere": "Dau spre adoptie un pui de pisica persana de aproximativ 6 luni, fetita, deparazitata",
+  "specie": "Pisica",
+  "rasa": "Alta rasa",
+  "gen": "FEMELA",
+  "varsta": "TREI_SASE_LUNI",
+  "utilizatorId": 2,
+  "stare": "ACTIV",
+  "locatieId": 3
+}
+
+###anunturi active
+GET http://localhost:8080/api/anunturi/active
+
+###anunturi neverificate
+GET http://localhost:8080/api/anunturi/neverificate
+
+###anunturi in raza de x km fata de locatia utilizatorului
+GET http://localhost:8080/api/anunturi/razaUser
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJyb2xlIjoiUk9MRV9VU0VSIiwic3ViIjoidXNlciIsImlhdCI6MTc2NDk0ODcwNiwiZXhwIjoxNzY1MDM1MTA2fQ.d-N_o-vGsE8Xdh2oeh3Zp8WBogVO7BHovGIe-_NnQLo
+
+###anunturi in raza de x km fata de locatia aleasa
+GET http://localhost:8080/api/anunturi/razaLocalitate?localitateId=13&razaKm=30
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJyb2xlIjoiUk9MRV9VU0VSIiwic3ViIjoidXNlciIsImlhdCI6MTc2Mzk5NDAwMSwiZXhwIjoxNzY0MDgwNDAxfQ.gsj-Zag_OmjcS8133AvQ2DRR64kaFaQ00l3awa96TLs
