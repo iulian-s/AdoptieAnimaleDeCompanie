@@ -14,9 +14,9 @@ class ImagineService(private val s3Client: S3Client) {
     private lateinit var bucketName: String
 
     fun saveImage(file: MultipartFile): String {
-        if (!esteImagineValida(file)) {
-            throw IllegalArgumentException("Fisierul nu este imagine JPEG/PNG!")
-        }
+//        if (!esteImagineValida(file)) {
+//            throw IllegalArgumentException("Fisierul nu este imagine JPEG/PNG!")
+//        }
         val filename = "${System.currentTimeMillis()}_${file.originalFilename}"
         val putObjectRequest = PutObjectRequest.builder()
             .bucket(bucketName)
