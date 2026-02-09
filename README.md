@@ -23,4 +23,4 @@ Prin tehnologiile utilizate si resursele utilizate se numara:
 - Rate limiter pentru endpointuri POST
 - Baza de date pentru localitatile din Romania - https://github.com/catalin87/baza-de-date-localitati-romania
 - Deployment Backend folosind Docker pe HuggingFace si Github Actions Workflow pentru automatizare
-- Aplicatie Android folosind JetpackCompose, care apeleaza endpointurile de pe serverul backend de pe HuggingFace
+- Aplicatie Android folosind JetpackCompose, care apeleaza endpointurile de pe serverul backend de pe HuggingFace - https://github.com/iulian-s/AdoptieAndroid
