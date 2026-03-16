@@ -38,7 +38,6 @@ resend:
 
 app:
   upload:
-#    dir: ${user.home}/pet-adoption/uploads/imagini
       supabaseUrl: ${SUPABASE_URL}
       supabaseAccessKey: ${ACCESS_KEY_ID}
       supabaseSecretKey: ${SECRET_KEY_ACCESS}
