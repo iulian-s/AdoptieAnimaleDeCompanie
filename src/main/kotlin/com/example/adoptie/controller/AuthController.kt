@@ -1,11 +1,14 @@
 package com.example.adoptie.controller
 
 import com.example.adoptie.dto.CreareUtilizatorDTO
+import com.example.adoptie.dto.ForgotPasswordRequestDTO
+import com.example.adoptie.dto.ResetPasswordDTO
 import com.example.adoptie.model.LogActiune
 import com.example.adoptie.repository.LogActiuneRepository
 import com.example.adoptie.service.DetaliiUtilizatorService
 import com.example.adoptie.service.JwtService
 import com.example.adoptie.service.UtilizatorService
+import jakarta.validation.Valid
 import org.springframework.http.ResponseEntity
 import org.springframework.security.authentication.AuthenticationManager
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken
@@ -23,7 +26,8 @@ class AuthController(
     private val detaliiUtilizatorService: DetaliiUtilizatorService,
     private val jwtService: JwtService,
     private val utilizatorService: UtilizatorService,
-    private val logRepo: LogActiuneRepository
+    private val logRepo: LogActiuneRepository,
+    private val authService: UtilizatorService
 ) {
     data class AuthRequest(val username: String, val parola: String)
     data class AuthResponse(val token: String)
@@ -59,7 +63,16 @@ class AuthController(
         } catch (e: IllegalArgumentException) {
             ResponseEntity.status(409).body(mapOf("error" to e.message))
         }
+    }
+    @PostMapping("/reset-password")
+    fun resetPassword(@Valid @RequestBody request: ResetPasswordDTO): ResponseEntity<Void>{
+        authService.resetPassword(request)
+        return ResponseEntity.ok().build()
+    }
 
-
+    @PostMapping("/forgot-password")
+    fun forgotPassword(@Valid @RequestBody request: ForgotPasswordRequestDTO): ResponseEntity<Void>{
+        authService.forgotPassword(request)
+        return ResponseEntity.ok().build()
     }
 }

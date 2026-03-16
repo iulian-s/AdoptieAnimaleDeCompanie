@@ -30,6 +30,12 @@ spring:
 jwt:
   secret: ${JWT_SECRET}
 
+resend:
+  api:
+    key: ${RESEND_API_KEY}
+  from:
+    email: ${RESEND_FROM_EMAIL}
+
 app:
   upload:
 #    dir: ${user.home}/pet-adoption/uploads/imagini
