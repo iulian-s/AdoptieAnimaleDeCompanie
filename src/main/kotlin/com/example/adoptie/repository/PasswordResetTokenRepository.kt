@@ -2,7 +2,9 @@ package com.example.adoptie.repository
 
 import com.example.adoptie.model.PasswordResetToken
 import com.example.adoptie.model.Utilizator
+import jakarta.transaction.Transactional
 import org.springframework.data.jpa.repository.JpaRepository
+import org.springframework.data.jpa.repository.Modifying
 import org.springframework.data.jpa.repository.Query
 import org.springframework.data.repository.query.Param
 import java.time.LocalDateTime
@@ -22,4 +24,11 @@ interface PasswordResetTokenRepository: JpaRepository<PasswordResetToken, Long> 
     fun deleteByUsedTrueOrCreatedAtBefore(expiry: LocalDateTime)
 
     fun deleteByUser(user: Utilizator)
+
+    @Modifying
+    @Transactional
+    @Query(
+        "DELETE FROM PasswordResetToken t where t.used = true OR t.createdAt < :expiryTime"
+    )
+    fun deleteOldOrUsedTokens(@Param("expiryTime") expiry: LocalDateTime)
 }

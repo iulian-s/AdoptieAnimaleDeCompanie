@@ -177,7 +177,7 @@ class UtilizatorService(
     fun forgotPassword(request: ForgotPasswordRequestDTO){
         val user = utilizatorRepository.findByEmail(request.email) ?: throw RuntimeException("User not found!")
         tokenRepository.deleteByUser(user)
-        val rawToken = UUID.randomUUID().toString()
+        val rawToken = (100000..999999).random().toString()
         val hashedToken = requireNotNull(passwordEncoder.encode(rawToken)){
             "Password Encoder returned null for token hashing"
         }
