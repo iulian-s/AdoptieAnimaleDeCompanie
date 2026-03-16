@@ -2,11 +2,16 @@ package com.example.adoptie.service
 
 import com.example.adoptie.dto.CreareUtilizatorDTO
 import com.example.adoptie.dto.EditareUtilizatorDTO
+import com.example.adoptie.dto.ForgotPasswordRequestDTO
+import com.example.adoptie.dto.ResetPasswordDTO
 import com.example.adoptie.dto.toEntity
+import com.example.adoptie.model.PasswordResetToken
 import com.example.adoptie.model.Utilizator
 import com.example.adoptie.repository.AnunturiRepository
 import com.example.adoptie.repository.LocalitateRepository
+import com.example.adoptie.repository.PasswordResetTokenRepository
 import com.example.adoptie.repository.UtilizatorRepository
+import jakarta.transaction.Transactional
 import org.jsoup.Jsoup
 import org.jsoup.safety.Safelist
 import org.springframework.beans.factory.annotation.Value
@@ -16,7 +21,9 @@ import org.springframework.security.crypto.password.PasswordEncoder
 import org.springframework.web.multipart.MultipartFile
 import java.nio.file.Files
 import java.nio.file.Paths
+import java.time.LocalDateTime
 import java.util.Locale.getDefault
+import java.util.UUID
 
 /**
  * Service pentru logica din spatele API-urilor specifice entitatii Utilizator
@@ -28,7 +35,9 @@ class UtilizatorService(
     //private val localitateRepository: LocalitateRepository,
     private val anunturiRepository: AnunturiRepository,
     private val localitateService: LocalitateService,
-    private val imagineService: ImagineService
+    private val imagineService: ImagineService,
+    private val tokenRepository: PasswordResetTokenRepository,
+    private val emailService: EmailService,
 ) {
     /**
      * Metoda de inregistrare a utilizatorului - creare cont
@@ -150,4 +159,37 @@ class UtilizatorService(
         val user = utilizatorRepository.findById(id).orElseThrow { IllegalArgumentException("Utilizatorul cu id $id nu s-a gasit.") }
         utilizatorRepository.delete(user)
     }
+
+    @Transactional
+    fun resetPassword(request: ResetPasswordDTO){
+        val resetToken = tokenRepository.findValidByTokenHash(request.token) ?: throw RuntimeException("The token is incorrect!")
+        val user = resetToken.user
+        val hashedPassword = requireNotNull(passwordEncoder.encode(request.newPassword)) {
+            "Password Encoder returned null for password reset!"
+        }
+        user.parola = hashedPassword
+        resetToken.used = true
+        utilizatorRepository.save(user)
+        tokenRepository.save(resetToken)
+    }
+
+    @Transactional
+    fun forgotPassword(request: ForgotPasswordRequestDTO){
+        val user = utilizatorRepository.findByEmail(request.email) ?: throw RuntimeException("User not found!")
+        tokenRepository.deleteByUser(user)
+        val rawToken = UUID.randomUUID().toString()
+        val hashedToken = requireNotNull(passwordEncoder.encode(rawToken)){
+            "Password Encoder returned null for token hashing"
+        }
+        val resetToken = PasswordResetToken(
+            user = user,
+            tokenHash = rawToken,
+            used = false,
+            createdAt = LocalDateTime.now(),
+            expiresAt = LocalDateTime.now().plusMinutes(15)
+        )
+        tokenRepository.save(resetToken)
+        emailService.sendPasswordResetEmail(user.email, rawToken)
+    }
+
 }
