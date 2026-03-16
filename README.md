@@ -18,6 +18,8 @@ Prin tehnologiile utilizate si resursele utilizate se numara:
 - Baza de date PostgreSQL in cloud pe Supabase
 - Director pentru incarcarea imaginilor din anunturi de tip bucket AWS S3 pe Supabase
 - JWT pentru autentificare/definire roluri
+- Serviciu de mail pentru gestionarea unei parole uitate
+- Widget Google Maps pentru vizualizarea locatiei unui anunt
 - Jsoup pentru protectie html
 - Model de invatare automata pentru verificarea imaginilor tip ONNX - https://huggingface.co/jdp8/nsfw_image_detection
 - Rate limiter pentru endpointuri POST

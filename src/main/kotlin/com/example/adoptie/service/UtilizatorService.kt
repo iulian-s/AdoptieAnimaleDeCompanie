@@ -38,6 +38,7 @@ class UtilizatorService(
     private val imagineService: ImagineService,
     private val tokenRepository: PasswordResetTokenRepository,
     private val emailService: EmailService,
+    private val rateLimitService: RateLimitService
 ) {
     /**
      * Metoda de inregistrare a utilizatorului - creare cont
@@ -175,6 +176,10 @@ class UtilizatorService(
 
     @Transactional
     fun forgotPassword(request: ForgotPasswordRequestDTO){
+        val bucket = rateLimitService.resolveBucket(request.email)
+        if(!bucket.tryConsume(1)){
+            throw RuntimeException("Prea multe incercari, asteptati 15 minute.")
+        }
         val user = utilizatorRepository.findByEmail(request.email) ?: throw RuntimeException("User not found!")
         tokenRepository.deleteByUser(user)
         val rawToken = (100000..999999).random().toString()
