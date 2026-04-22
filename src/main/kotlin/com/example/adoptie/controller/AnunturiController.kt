@@ -129,11 +129,11 @@ class AnunturiController (
     /**
      * Metoda pentru stergerea unui anunt de catre admin
      */
-    @PreAuthorize("hasRole('ADMIN')")
+    @PreAuthorize("hasRole('USER') or hasRole('ADMIN')")
     @DeleteMapping("/{id}")
     fun stergeAnunt(@PathVariable id: Long): ResponseEntity<String> {
         anunturiService.stergereAnunt(id)
-        return ResponseEntity.ok("Anuntul cu id $id a fost sters cu succes!")
+        return ResponseEntity.noContent().build()
     }
 
     /**
