@@ -22,40 +22,26 @@ import java.nio.file.Paths
 class ModerareService {
     @Value("\${model.ai.path}")
     private lateinit var modelPathStr: String
-    @Value("\${model.labels.path}")
-    private lateinit var labelsPathStr: String
     private lateinit var model: ZooModel<Image, Classifications>
-    private lateinit var synsets: List<String>
 
     @PostConstruct
     fun init() {
-        val modelPath = Paths.get(modelPathStr)
-        val labelsPath = Paths.get(labelsPathStr)
+        val synsets = listOf("normal", "nsfw")
+        val path = Paths.get(modelPathStr)
 
-        if (!Files.exists(modelPath)) {
-            throw IllegalStateException("Model not found: ${modelPath.toAbsolutePath()}")
+
+        if (!Files.exists(path)) {
+            throw IllegalStateException("Modelul AI nu a fost găsit la calea: ${path.toAbsolutePath()}")
         }
-
-        if (!Files.exists(labelsPath)) {
-            throw IllegalStateException("Labels not found: ${labelsPath.toAbsolutePath()}")
-        }
-        synsets = Files.readAllLines(labelsPath)
-
 
         val criteria = Criteria.builder()
             .setTypes(Image::class.java, Classifications::class.java)
             .optEngine("OnnxRuntime")
-            .optModelPath(modelPath)
+            .optModelPath(path)
             .optTranslator(
                 ImageClassificationTranslator.builder()
                     .addTransform(Resize(224, 224))
                     .addTransform(ToTensor())
-                    .addTransform(
-                        Normalize(
-                            floatArrayOf(0.485f, 0.456f, 0.406f),
-                            floatArrayOf(0.229f, 0.224f, 0.225f)
-                        )
-                    )
                     .optApplySoftmax(true)
                     .optSynset(synsets)
                     .build()
@@ -74,27 +60,12 @@ class ModerareService {
                 val img = ImageFactory.getInstance().fromInputStream(file.inputStream)
                 val result = predictor.predict(img)
 
-                val top3 = result.topK<Classifications.Classification>(3)
-
-                top3.any { classification ->
-                    val label = classification.className.lowercase()
-                    val score = classification.probability
-
-                    val index = label.split(",")[0].trim().toIntOrNull() ?: -1
-
-                    val isAnimalIndex = when (index) {
-                        in 0..397 -> true
-                        in 398..500 -> false
-                        else -> false
-                    }
-
-                    if (isAnimalIndex && score > 0.35) {
-                        println("Animal detectat: $label (${String.format("%.2f", score * 100)}%)")
-                        return@any true
-                    }
-                    false
-                }
-            }
+                val classification =
+                    result.get("normal") as? Classifications.Classification
+                val normalScore = classification?.probability ?: 0.0
+                println("Imagine ${file.originalFilename}: Safe score = ${"%.2f".format(normalScore * 100)}%")
+                normalScore > 0.8
+        }
         }
     }
 }
