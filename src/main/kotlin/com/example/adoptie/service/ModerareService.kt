@@ -69,149 +69,32 @@ class ModerareService {
     fun suntToateImaginileSafe(imagini: List<MultipartFile>?): Boolean {
         if (imagini.isNullOrEmpty()) return true
 
-        //cream predictor
         return imagini.parallelStream().allMatch { file ->
             model.newPredictor().use { predictor ->
                 val img = ImageFactory.getInstance().fromInputStream(file.inputStream)
                 val result = predictor.predict(img)
 
-                val best = result.best<Classifications.Classification>()
+                val top3 = result.topK<Classifications.Classification>(3)
 
-                println(
-                    "Imagine ${file.originalFilename}: " +
-                            "${best.className} (${String.format("%.2f", best.probability * 100)}%)"
-                )
+                top3.any { classification ->
+                    val label = classification.className.lowercase()
+                    val score = classification.probability
 
-                val isAnimal = isAnimal(result)
+                    val index = label.split(",")[0].trim().toIntOrNull() ?: -1
 
-                println(" -> Animal detected: $isAnimal")
+                    val isAnimalIndex = when (index) {
+                        in 0..397 -> true
+                        in 398..500 -> false
+                        else -> false
+                    }
 
-                isAnimal
+                    if (isAnimalIndex && score > 0.35) {
+                        println("Animal detectat: $label (${String.format("%.2f", score * 100)}%)")
+                        return@any true
+                    }
+                    false
+                }
             }
-        }
-    }
-
-    private fun isAnimal(result: Classifications): Boolean {
-        val animalKeywords = listOf(
-            "Persian_cat", "Siamese_cat", "Egyptian_cat",
-            "Chihuahua",
-            "Japanese_spaniel",
-            "Maltese_dog",
-            "Pekinese",
-            "Shih-Tzu",
-            "Blenheim_spaniel",
-            "papillon",
-            "toy_terrier",
-            "Rhodesian_ridgeback",
-            "Afghan_hound",
-            "basset",
-            "beagle",
-            "bloodhound",
-            "bluetick",
-            "black-and-tan_coonhound",
-            "Walker_hound",
-            "English_foxhound",
-            "redbone",
-            "borzoi",
-            "Irish_wolfhound",
-            "Italian_greyhound",
-            "whippet",
-            "Ibizan_hound",
-            "Norwegian_elkhound",
-            "otterhound",
-            "Saluki",
-            "Scottish_deerhound",
-            "Weimaraner",
-            "Staffordshire_bullterrier",
-            "American_Staffordshire_terrier",
-            "Bedlington_terrier",
-            "Border_terrier",
-            "Kerry_blue_terrier",
-            "Irish_terrier",
-            "Norfolk_terrier",
-            "Norwich_terrier",
-            "Yorkshire_terrier",
-            "wire-haired_fox_terrier",
-            "Lakeland_terrier",
-            "Sealyham_terrier",
-            "Airedale",
-            "cairn",
-            "Australian_terrier",
-            "Dandie_Dinmont",
-            "Boston_bull",
-            "miniature_schnauzer",
-            "giant_schnauzer",
-            "standard_schnauzer",
-            "Scotch_terrier",
-            "Tibetan_terrier",
-            "silky_terrier",
-            "soft-coated_wheaten_terrier",
-            "West_Highland_white_terrier",
-            "Lhasa",
-            "flat-coated_retriever",
-            "curly-coated_retriever",
-            "golden_retriever",
-            "Labrador_retriever",
-            "Chesapeake_Bay_retriever",
-            "German_short-haired_pointer",
-            "vizsla",
-            "English_setter",
-            "Irish_setter",
-            "Gordon_setter",
-            "Brittany_spaniel",
-            "clumber",
-            "English_springer",
-            "Welsh_springer_spaniel",
-            "cocker_spaniel",
-            "Sussex_spaniel",
-            "Irish_water_spaniel",
-            "kuvasz",
-            "schipperke",
-            "groenendael",
-            "malinois",
-            "briard",
-            "kelpie",
-            "komondor",
-            "Old_English_sheepdog",
-            "Shetland_sheepdog",
-            "collie",
-            "Border_collie",
-            "Bouvier_des_Flandres",
-            "Rottweiler",
-            "German_shepherd",
-            "Doberman",
-            "miniature_pinscher",
-            "Greater_Swiss_Mountain_dog",
-            "Bernese_mountain_dog",
-            "Appenzeller",
-            "EntleBucher",
-            "boxer",
-            "bull_mastiff",
-            "Tibetan_mastiff",
-            "French_bulldog",
-            "Great_Dane",
-            "Saint_Bernard",
-            "Eskimo_dog",
-            "malamute",
-            "Siberian_husky",
-            "dalmatian",
-            "affenpinscher",
-            "basenji",
-            "pug",
-            "hamster",
-
-        )
-        val threshold = 0.50
-
-        val top = result.topK<Classifications.Classification>(5)
-
-        return top.any { classification ->
-            val label = classification.className.lowercase()
-            val prob = classification.probability
-
-            val containsKeyword = animalKeywords.any { keyword -> label.contains(keyword) }
-
-            containsKeyword && prob >= threshold
         }
     }
 }
