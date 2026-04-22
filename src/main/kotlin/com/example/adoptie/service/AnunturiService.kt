@@ -166,6 +166,9 @@ class AnunturiService(
         this.listaImagini = dto.listaImagini
         this.stare = dto.stare
         this.locatie = localitateRepository.findById(dto.locatieId).orElseThrow{IllegalArgumentException("Localitate invalida") }
+        this.categorie = dto.categorie
+        this.latitudine = dto.latitudine
+        this.longitudine = dto.longitudine
     }
 
 
@@ -187,6 +190,9 @@ class AnunturiService(
             varsta = dto.varsta
             locatie = localitateRepository.findById(dto.locatieId)
                 .orElseThrow { IllegalArgumentException("Localitate invalida") }
+            categorie = dto.categorie
+            latitudine = dto.latitudine
+            longitudine = dto.longitudine
 
             val esteSafe = moderareService.suntToateImaginileSafe(noiImagini)
 

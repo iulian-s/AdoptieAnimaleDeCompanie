@@ -89,4 +89,10 @@ data class Anunt(
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "id_locatie")
     var locatie: Localitate,
+
+    @Enumerated(EnumType.STRING)
+    var categorie: Categorie = Categorie.ADOPTIE,
+
+    var latitudine: Double? = null,
+    var longitudine: Double? = null,
 )

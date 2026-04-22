@@ -1,5 +1,6 @@
 package com.example.adoptie.dto
 
+import com.example.adoptie.model.Categorie
 import com.example.adoptie.model.Gen
 import com.example.adoptie.model.Stare
 import com.example.adoptie.model.Varsta
@@ -26,5 +27,8 @@ data class CreareAnuntDTO(
     //nu e folosit la niciun request get, asa ca nu e necesara salvarea listei de imagini in acest dto
     //var listaImagini: MutableList<String> = mutableListOf(),
     var stare: Stare = Stare.NEVERIFICAT,
-    var locatieId: Long = 0
+    var locatieId: Long = 0,
+    var categorie: Categorie = Categorie.ADOPTIE,
+    var latitudine: Double? = null,
+    var longitudine: Double? = null,
 )

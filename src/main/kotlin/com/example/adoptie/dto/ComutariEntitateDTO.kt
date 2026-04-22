@@ -105,6 +105,9 @@ fun Anunt.toDTO(): AnuntDTO = AnuntDTO(
     createdAt = this.createdAt,
     updatedAt = this.updatedAt,
     locatieId = this.locatie.id,
+    categorie = this.categorie,
+    latitudine = this.latitudine,
+    longitudine = this.longitudine
 )
 
 /**
@@ -125,7 +128,10 @@ fun AnuntDTO.toEntity(utilizator: Utilizator, locatie: Localitate): Anunt = Anun
     stare = this.stare,
     createdAt = this.createdAt,
     updatedAt = this.updatedAt,
-    locatie = locatie
+    locatie = locatie,
+    categorie = this.categorie,
+    latitudine = this.latitudine,
+    longitudine = this.longitudine
 )
 
 /**
@@ -142,5 +148,8 @@ fun CreareAnuntDTO.toEntity(utilizator: Utilizator, locatie: Localitate): Anunt 
     varstaMax = this.varstaMax,
     utilizator = utilizator,
     stare = this.stare,
-    locatie = locatie
+    locatie = locatie,
+    categorie = this.categorie,
+    latitudine = this.latitudine,
+    longitudine = this.longitudine
 )

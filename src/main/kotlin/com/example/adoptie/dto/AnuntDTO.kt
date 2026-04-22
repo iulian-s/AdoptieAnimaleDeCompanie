@@ -1,5 +1,6 @@
 package com.example.adoptie.dto
 
+import com.example.adoptie.model.Categorie
 import com.example.adoptie.model.Gen
 import com.example.adoptie.model.Stare
 import com.example.adoptie.model.Varsta
@@ -32,6 +33,9 @@ data class AnuntDTO(
     var stare: Stare = Stare.NEVERIFICAT,
     val createdAt: LocalDateTime? = null,
     var updatedAt: LocalDateTime? = null,
-    var locatieId: Long = 0
+    var locatieId: Long = 0,
+    val categorie: Categorie = Categorie.ADOPTIE,
+    val latitudine: Double? = null,
+    val longitudine: Double? = null,
 
     )
