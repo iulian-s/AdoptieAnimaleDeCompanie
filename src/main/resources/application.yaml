@@ -46,7 +46,9 @@ app:
 
 model:
   ai:
-    path: ./model/model.onnx
+    path: ./model/mobilenet.onnx
+  labels:
+    path: ./model/imagenet_classes.txt
 management:
   endpoints:
     web:
