@@ -31,7 +31,7 @@ class ModerareService {
 
 
         if (!Files.exists(path)) {
-            throw IllegalStateException("Modelul AI nu a fost găsit la calea: ${path.toAbsolutePath()}")
+            throw IllegalStateException("Modelul AI nu a fost gasit la calea: ${path.toAbsolutePath()}")
         }
 
         val criteria = Criteria.builder()

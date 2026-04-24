@@ -158,7 +158,6 @@ class AnunturiController (
 
     @GetMapping("/judet/{numeJudet}")
     fun getAnunturiByJudet(@PathVariable numeJudet: String): ResponseEntity<List<AnuntDTO>> {
-        // Filtrează anunțurile unde localitatea aparține județului respectiv
         val anunturi = anunturiService.vizualizareAnunturiActive()
             .filter { it.locatie.judet.equals(numeJudet, ignoreCase = true) }
             .map { it.toDTO() }

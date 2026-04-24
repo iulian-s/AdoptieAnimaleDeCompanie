@@ -204,8 +204,6 @@ class AnunturiService(
                 //listaImagini = imaginiFinale
                 listaImagini = pathuriNoi.toMutableList()
             } else {
-                // Dacă nu s-au trimis imagini noi, păstrăm ce a venit în DTO
-                // (util în cazul în care userul a șters una din cele vechi în UI)
                 listaImagini = dto.listaImagini.toMutableList()
             }
 
