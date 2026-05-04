@@ -42,7 +42,7 @@ export default function LoginPage() {
                 setError("Nu te poti conecta cu un cont de utilizator!");
             }
         } catch (err) {
-            setError("Username/parola incorecte!");
+            setError(`Username/parola incorecte! + ${err}`);
         }
     };
 
@@ -64,9 +64,6 @@ export default function LoginPage() {
                 />
                 <div style={{ display: "flex", gap: "10px" }}>
                     <button type="submit">Autentificare</button>
-                    {/*<button type="button" onClick={() => navigate("/register")}>*/}
-                    {/*    Register*/}
-                    {/*</button>*/}
                 </div>
             </form>
             {error && <p style={{ color: "red" }}>{error}</p>}
