@@ -163,4 +163,12 @@ class AnunturiController (
             .map { it.toDTO() }
         return ResponseEntity.ok(anunturi)
     }
+
+    @GetMapping("/statistici")
+    fun getStatistici(
+        @RequestParam zile: Int,
+        @RequestParam(required = false) categorie: String?
+    ): ResponseEntity<Map<String, Any>> {
+        return ResponseEntity.ok(anunturiService.getStatistici(zile, categorie))
+    }
 }

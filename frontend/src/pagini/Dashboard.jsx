@@ -4,6 +4,7 @@ import "../css/dashboard.css";
 import Anunturi from "././Anunturi.jsx"
 import Utilizatori from "./Utilizatori.jsx";
 import Loguri from "./Loguri.jsx";
+import Statistici from "./Statistici.jsx"
 
 export default function Dashboard() {
     const [activeTab, setActiveTab] = useState("tab1");
@@ -17,6 +18,8 @@ export default function Dashboard() {
                 return <Utilizatori />;
             case "tab3":
                 return <Loguri />;
+            case "tab4":
+                return <Statistici />;
             default:
                 return null;
         }
@@ -57,6 +60,12 @@ export default function Dashboard() {
                         className={`tab-button ${activeTab === "tab3" ? "active" : ""}`}
                     >
                         Loguri
+                    </button>
+                    <button
+                        onClick={() => setActiveTab("tab4")}
+                        className={`tab-button ${activeTab === "tab4" ? "active" : ""}`}
+                    >
+                        Statistici
                     </button>
                 </div>
 

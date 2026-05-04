@@ -17,6 +17,7 @@ import org.springframework.web.multipart.MultipartFile
 import java.io.File
 import java.nio.file.Files
 import java.nio.file.Paths
+import java.time.LocalDateTime
 import kotlin.math.pow
 
 /**
@@ -234,5 +235,24 @@ class AnunturiService(
         val auth = SecurityContextHolder.getContext().authentication
         val user = utilizatorRepository.findByUsername(auth.name) ?: throw IllegalArgumentException("Nu am gasit utilizatorul ${auth.name}")
         return (anunturiRepository.findByUtilizator_Id(user.id))
+    }
+
+    fun getStatistici(zile: Int, categorieNume: String?): Map<String, Any> {
+        val dataStart = java.time.LocalDateTime.now().minusDays(zile.toLong())
+        // Presupunem că repository-ul are metoda findAnunturiRecente sau filtrăm manual
+        var anunturi = anunturiRepository.findAll().filter { it.createdAt!! >= dataStart }
+
+        if (!categorieNume.isNullOrBlank()) {
+            anunturi = anunturi.filter { it.categorie.name.equals(categorieNume, ignoreCase = true) }
+        }
+
+        val perCategorie = anunturi.groupingBy { it.categorie.name }.eachCount()
+        val perLocalitate = anunturi.groupingBy { it.locatie.nume }.eachCount()
+
+        return mapOf(
+            "perCategorie" to perCategorie,
+            "perLocalitate" to perLocalitate,
+            "total" to anunturi.size
+        )
     }
 }

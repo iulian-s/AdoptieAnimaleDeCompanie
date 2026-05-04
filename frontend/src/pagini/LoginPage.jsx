@@ -31,7 +31,7 @@ export default function LoginPage() {
     const handleLogin = async (e) => {
         e.preventDefault();
         try {
-            const res = await api.post("/api/auth/login", { username, parola });
+            const res = await api.post("auth/login", { username, parola });
             const token = res.data.token;
             const decoded = jwtDecode(token);
 
